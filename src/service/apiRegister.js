@@ -8,7 +8,8 @@ export const END_POINT = {
   properties: 'properties',
   schools: 'schools',
   registerMember: 'member_registrations',
-  photographers: 'photographers',
+  photographers: 'users/photographers',
   members: 'members',
-  date_takens: 'date_takens'
+  date_takens: 'date_takens',
+  photographerDateTakens:'photographer_date_takens'
 };
