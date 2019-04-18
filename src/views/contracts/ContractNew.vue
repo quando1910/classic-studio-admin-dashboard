@@ -5,7 +5,10 @@
         <b-card>
           <div slot="header">
             <strong>{{this.id ? 'Sửa' : 'Tạo mới'}} hợp đồng </strong> <small>thông tin</small>
-            <el-button v-if="id" class="to-the-right" type="warning" icon="el-icon-delete" round @click="handleDelete"></el-button>
+            <el-button v-if="id" class="to-the-right" type="danger" icon="el-icon-delete" @click="handleDelete"></el-button>
+            <router-link target="_blank" :to="`/public/contracts/${$route.params.id}?code=${contract.secret_key}`">
+              <el-button v-if="id" class="to-the-right" style="margin-right: 20px" type="warning" icon="el-icon-share"></el-button>
+            </router-link>
           </div>
           <b-row>
             <b-col sm="12">
@@ -120,7 +123,7 @@
           </b-form-group>
           <b-form-group>
             <label for="vat">Danh sách đồ đi kèm</label><br>
-            <el-tag type="success" v-for="sp in subProperty" v-bind:key="sp.id">{{sp.name}}</el-tag>
+            <el-tag type="success" v-for="sp in subProperty" :key="sp.id">{{sp.name}}</el-tag>
           </b-form-group>
           <b-form-group>
             <label for="vat">Trang phục concept</label><br>
@@ -181,7 +184,7 @@
             <el-tabs type="card" v-if="contract.date_takens_attributes[0].date_taken != ''">
               <el-tab-pane
                 v-for="(date, index) in this.contract.date_takens_attributes"
-                v-bind:key="index"
+                :key="index"
                 :label="'Ngày '+ getDate(date.date_taken)">
                 <el-button class="to-the-right" type="warning" icon="el-icon-edit" @click="openPlanDialog(date)" circle></el-button>
                 <el-timeline :reverse="reverse" style="width: 80%; margin-top: 15px">
@@ -196,6 +199,17 @@
                 </el-timeline>
               </el-tab-pane>
             </el-tabs>
+        </b-card>
+        <b-card>
+          <div slot="header">
+            <strong>Ghi chú</strong>
+          </div>
+          <el-input
+            type="textarea"
+            autosize
+            placeholder="Please input"
+            v-model="contract.note">
+          </el-input>
         </b-card>
         <b-card>
           <div slot="header">
@@ -342,6 +356,8 @@ export default {
         name: "",
         group: "",
         school_id: "",
+        note: "",
+        secret_key: "",
         phone: "",
         address: "",
         type: "",
@@ -644,6 +660,7 @@ export default {
       this.contract.name = data.name;
       this.contract.group = data.group;
       this.contract.phone = data.phone;
+      this.contract.note = data.note;
       this.contract.address = data.address;
       this.contract.label = data.label;
       this.contract.total_member = data.total_member;
@@ -651,6 +668,7 @@ export default {
       this.contract.female_number = data.female_number;
       this.contract.deposit = data.deposit;
       this.contract.school_id = data.school_id;
+      this.contract.secret_key = data.secret_key;
       this.budgets = data.budgets;
       if (data.packages.length > 0) {
         this.package_id = data.packages.map(x => x.id);
