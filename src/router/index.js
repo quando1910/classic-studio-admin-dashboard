@@ -63,6 +63,8 @@ const User = () => import('@/views/users/User')
 const ContractNew = () => import('@/views/contracts/ContractNew')
 const ContractSearch = () => import('@/views/contracts/ContractSearch')
 const ContractSchedule = () => import('@/views/contracts/ContractSchedule')
+const ContractPublic = () => import('@/views/contracts/ContractPublic')
+const ContractPayment = () => import('@/views/contracts/ContractPayment')
 const Photographers = () => import('@/views/photographers/Photographers')
 const PhotographerSchedule = () => import('@/views/photographers/PhotographerSchedule')
 
@@ -101,6 +103,11 @@ export default new Router({
           path: '/contracts/:id',
           name: 'Contract',
           component: ContractNew
+        },
+        {
+          path: '/contracts/:id/payment',
+          name: 'ContractPayment',
+          component: ContractPayment
         },
         {
           path: '/photographers',
@@ -347,6 +354,11 @@ export default new Router({
           ]
         }
       ]
+    },
+    {
+      path: '/public/contracts/:id',
+      name: 'ContractPublic',
+      component: ContractPublic
     },
     {
       path: '/pages',

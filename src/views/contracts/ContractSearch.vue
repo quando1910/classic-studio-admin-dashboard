@@ -14,11 +14,23 @@
         </el-col>
       </el-row>
     </div>
-    <el-table v-loading="loading" :data="tableData" style="width: 100%" @row-click="handleDetail">
+    <el-table v-loading="loading" :data="tableData" style="width: 100%">
       <el-table-column prop="id" label="ID" width="80"></el-table-column>
       <el-table-column prop="name" label="Hợp đồng" width></el-table-column>
       <el-table-column prop="group" label="Nhóm/Lớp" width="180"></el-table-column>
       <el-table-column prop="code" label="Mã hợp đồng" width="180"></el-table-column>
+      <el-table-column
+        align="right">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="handleDetail(scope.row)">Sửa</el-button>
+          <el-button
+            size="mini"
+            type="success"
+            @click="handlePayment(scope.row)">Thanh toán</el-button>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -71,6 +83,9 @@ export default {
   methods: {
     handleDetail(row) {
       this.$router.push(`/contracts/${row.id}`);
+    },
+    handlePayment(row) {
+      this.$router.push(`/contracts/${row.id}/payment`);
     },
     handleDelete(index, row) {
       console.log(index, row);

@@ -27,7 +27,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">Thoát</el-button>
-        <el-button type="primary" @click="handelCreate">Tạo Plan</el-button>
+        <el-button type="primary" @click="handelCreate">Tạo thợ ảnh</el-button>
       </span>
     </el-dialog>
   </section>
@@ -60,8 +60,7 @@ export default {
   mounted() {
     api.get([END_POINT.photographers]).then(
       data => {
-        console.log(data);
-        this.tableData = data.photographers;
+        this.tableData = data.users;
         this.loading = false;
       },
       err => {

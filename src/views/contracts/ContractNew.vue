@@ -185,14 +185,14 @@
                 :label="'Ngày '+ getDate(date.date_taken)">
                 <el-button class="to-the-right" type="warning" icon="el-icon-edit" @click="openPlanDialog(date)" circle></el-button>
                 <el-timeline :reverse="reverse" style="width: 80%; margin-top: 15px">
-                  <div v-for="(plan, ip) in date.plans_attributes" :key="ip">
                   <el-timeline-item
-                    v-if="plan._destroy !== 1"
+                    v-for="(plan, ip) in date.plans_attributes" :key="ip"
                     :timestamp="plan.plan_time">
-                    <b>{{plan.place}}</b>: {{plan.costume[0]}} - {{plan.content}}
+                    <div v-if="plan._destroy !== 1">
+                      <b>{{plan.plan_time}}</b>: {{plan.costume[0]}} - {{plan.content}}
+                    </div>
                     <el-button type="danger" icon="el-icon-delete" @click="deletePlan(index, ip)" circle size="mini"></el-button>
                   </el-timeline-item>
-                  </div>
                 </el-timeline>
               </el-tab-pane>
             </el-tabs>
@@ -487,7 +487,7 @@ export default {
         api.post([END_POINT.contracts], this.contract).then(
           data => {
             this.loading = false;
-            this.$router.push("/viewer/contract");
+            this.$router.push("/contracts");
           },
           err => {
             this.loading = false;
@@ -497,7 +497,7 @@ export default {
         api.put([END_POINT.contracts, this.id], this.contract).then(
           data => {
             this.loading = false;
-            this.$router.push(`/viewer/contract/${this.id}`);
+            this.$router.push(`/contracts/${this.id}`);
           },
           err => {
             this.loading = false;
@@ -509,7 +509,7 @@ export default {
       api.delete([END_POINT.contracts, this.id]).then(
         data => {
           this.loading = false;
-          this.$router.push(`/viewer/contract`);
+          this.$router.push(`/contracts`);
         },
         err => {
           this.loading = false;
