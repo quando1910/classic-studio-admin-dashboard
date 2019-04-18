@@ -2,61 +2,73 @@
 <div class="public-contract">
     <div class="contract" v-if="contract">
       <div class="center-head background-head">
-        <div class="container">
-        <h2>HỢP ĐỒNG ĐIỆN TỬ</h2>
-        <h5>eBillings</h5>
-        <router-link tag="a" :to="`/contracts/${$route.params.id}`">
-          <p>Đi đến hệ thống chăm sóc khách hàng tại đây</p>
-        </router-link>
-        <div class="header__logo"><a href="/home"><img src="../../assets/img/logo-main-black.png" style="width: 150px;" alt=""/></a></div>
-        <h5>Mã code hoá đơn:  <b style="text-transform: uppercase"> {{contract.code}} </b></h5>
-        <b>Tình trạng ảnh:</b>
-        <el-tag type="danger" v-if="!contract.image_status">Thu thập file sửa</el-tag>
-        <el-tag type="warning" v-if="contract.image_status == 1">Đang sửa</el-tag>
-        <el-tag type="primary" v-if="contract.image_status == 2">Up ảnh</el-tag>
-        <el-tag type="success" v-if="contract.image_status == 3">Full ảnh Sửa</el-tag>
-        <el-tag type="danger" v-if="!contract.raw_status">Thu thập file gốc</el-tag>
-        <el-tag type="primary" v-if="contract.raw_status == 1">Up ảnh</el-tag>
-        <el-tag type="success" v-if="contract.raw_status == 2">Full ảnh gốc</el-tag><br>
-        <b>Tình trạng Thanh Toán:</b>
-        <el-tag type="danger" v-if="!contract.payment_status">Chưa đặt cọc</el-tag>
-        <el-tag type="warning" v-if="contract.payment_status == 1">Đặt cọc</el-tag>
-        <el-tag type="primary" v-if="contract.payment_status == 2">Chưa thanh toán đủ</el-tag>
-        <el-tag type="success" v-if="contract.payment_status == 3">Đã thanh toán</el-tag><br>
-        <b>Tình trạng Thuê:</b>
-        <el-tag type="danger" v-if="!contract.clothes_status">Chưa trả xong</el-tag>
-        <el-tag type="success" v-if="contract.clothes_status == 1">Trả hết trang phục</el-tag><br>
-        <b>Tình trạng Video:</b>
-        <el-tag type="danger" v-if="!contract.video_status">Thu thập</el-tag>
-        <el-tag type="warning" v-if="contract.video_status == 1">Đang sửa</el-tag>
-        <el-tag type="primary" v-if="contract.video_status == 2">Up video</el-tag>
-        <el-tag type="success" v-if="contract.video_status == 3">Full Video</el-tag><br>
-        <b>Tình trạng In: </b>
-        <el-tag type="danger" v-if="!contract.print_status">Chưa in</el-tag>
-        <el-tag type="warning" v-if="contract.print_status == 1">Xử lý File</el-tag>
-        <el-tag type="primary" v-if="contract.print_status == 2">In ảnh xong, chờ giao</el-tag>
-        <el-tag type="success" v-if="contract.print_status == 3">Đã giao ảnh</el-tag><br>
+        <div class="over-layer">
+          <div class="container">
+          <h2>HỢP ĐỒNG ĐIỆN TỬ</h2>
+          <h5>eBillings</h5>
+          <router-link tag="a" :to="`/contracts/${$route.params.id}`">
+            <p>Đi đến hệ thống chăm sóc khách hàng tại đây</p>
+          </router-link>
+          <div class="header__logo"><a href="/home"><img src="../../assets/img/logo-main-black.png" style="width: 150px;" alt=""/></a></div>
+          <h5>Mã code hoá đơn:  <b style="text-transform: uppercase"> {{contract.code}} </b></h5>
+          <b>Tình trạng ảnh:</b>
+          <el-tag class="tag tag-danger" type="danger" v-if="!contract.image_status">Thu thập file sửa</el-tag>
+          <el-tag type="warning" v-if="contract.image_status == 1">Đang sửa</el-tag>
+          <el-tag class="tag tag-primary" type="primary" v-if="contract.image_status == 2">Up ảnh</el-tag>
+          <el-tag type="success" v-if="contract.image_status == 3">Full ảnh Sửa</el-tag>
+          <el-tag class="tag tag-danger" type="danger" v-if="!contract.raw_status">Thu thập file gốc</el-tag>
+          <el-tag class="tag tag-primary" type="primary" v-if="contract.raw_status == 1">Up ảnh</el-tag>
+          <el-tag type="success" v-if="contract.raw_status == 2">Full ảnh gốc</el-tag><br>
+          <b>Tình trạng Thanh Toán:</b>
+          <el-tag class="tag tag-danger" type="danger" v-if="!contract.payment_status">Chưa đặt cọc</el-tag>
+          <el-tag type="warning" v-if="contract.payment_status == 1">Đặt cọc</el-tag>
+          <el-tag class="tag tag-primary" type="primary" v-if="contract.payment_status == 2">Chưa thanh toán đủ</el-tag>
+          <el-tag type="success" v-if="contract.payment_status == 3">Đã thanh toán</el-tag><br>
+          <b>Tình trạng Thuê:</b>
+          <el-tag class="tag tag-danger" type="danger" v-if="!contract.clothes_status">Chưa trả xong</el-tag>
+          <el-tag type="success" v-if="contract.clothes_status == 1">Trả hết trang phục</el-tag><br>
+          <b>Tình trạng Video:</b>
+          <el-tag class="tag tag-danger" type="danger" v-if="!contract.video_status">Thu thập</el-tag>
+          <el-tag type="warning" v-if="contract.video_status == 1">Đang sửa</el-tag>
+          <el-tag class="tag tag-primary" type="primary" v-if="contract.video_status == 2">Up video</el-tag>
+          <el-tag type="success" v-if="contract.video_status == 3">Full Video</el-tag><br>
+          <b>Tình trạng In: </b>
+          <el-tag class="tag tag-danger" type="danger" v-if="!contract.print_status">Chưa in</el-tag>
+          <el-tag type="warning" v-if="contract.print_status == 1">Xử lý File</el-tag>
+          <el-tag class="tag tag-primary" type="primary" v-if="contract.print_status == 2">In ảnh xong, chờ giao</el-tag>
+          <el-tag type="success" v-if="contract.print_status == 3">Đã giao ảnh</el-tag><br>
+        </div>
       </div>
       </div>
       <hr>
       <el-row>
         <h3 class="center-head">Thông tin hợp đồng</h3>
         <el-col class="center-head" :span="12">
-          <h4 >Bên A</h4>
-          <label>Họ và Tên: </label><b>  Đỗ Hồng Quân  </b><a target="_blank" href="https://www.fb.com/dhquan19"><i class="fa fa-facebook-official" aria-hidden="true"></i></a><br>
-          <label>Đơn vị: </label><b>The Classic Studio</b><br>
-          <label>Địa chỉ: </label><b>43 Tống Phước Phổ,<br> P. Hòa Cường Bắc, Q. Hải Châu, Đà Nẵng</b><br>
-          <label>SĐT: </label><b><a :href="`tel: ${`0773420210`}`">{{`0773420210`}}</a></b><br>
+          <div class="contracts-form">
+            <div class="avatar">
+              <img src="../../assets/img/photographer.png" alt="Si" class="avatar-image">
+            </div>
+            <h4 >Bên A</h4>
+            <label>Họ và Tên: </label><b>  Đỗ Hồng Quân  </b><a target="_blank" href="https://www.fb.com/dhquan19"><i class="fa fa-facebook-official" aria-hidden="true"></i></a><br>
+            <label>Đơn vị: </label><b>The Classic Studio</b><br>
+            <label>Địa chỉ: </label><b>43 Tống Phước Phổ,<br> P. Hòa Cường Bắc, Q. Hải Châu, Đà Nẵng</b><br>
+            <label>SĐT: </label><b><a :href="`tel: ${`0773420210`}`">{{`0773420210`}}</a></b><br>
+          </div>
         </el-col>
         <el-col class="center-head" :span="12">
-          <h4>Bên B</h4>
-          <label>Họ và Tên: </label><b>  {{contract.name}}  </b><a target="_blank" :href="contract.member.link_facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a><br>
-          <label>Số lượng thành viên: </label><b> {{ contract.total_member }}</b><br>
-          <label>Đại diện của: </label><b>{{contract.group}} - {{contract.school.name}}</b><br>
-          <label>SĐT: </label>
-          <b><a :href="`tel: ${contract.member.phone_number}`">{{contract.member.phone_number}}</a></b><br>
-          <!-- <b><a :href="`tel: ${contract.phone1}`">{{contract.phone1}}</a></b> -
-          <b><a :href="`tel: ${contract.phone2}`">{{contract.phone2}}</a></b><br> -->
+          <div class="contracts-form">
+            <div class="avatar">
+              <img src="../../assets/img/photographer.png" alt="Si" class="avatar-image">
+            </div>
+            <h4>Bên B</h4>
+            <label>Họ và Tên: </label><b>  {{contract.name}}  </b><a target="_blank" :href="contract.member.link_facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a><br>
+            <label>Số lượng thành viên: </label><b> {{ contract.total_member }}</b><br>
+            <label>Đại diện của: </label><b>{{contract.group}} - {{contract.school.name}}</b><br>
+            <label>SĐT: </label>
+            <b><a :href="`tel: ${contract.member.phone_number}`">{{contract.member.phone_number}}</a></b><br>
+            <!-- <b><a :href="`tel: ${contract.phone1}`">{{contract.phone1}}</a></b> -
+            <b><a :href="`tel: ${contract.phone2}`">{{contract.phone2}}</a></b><br> -->
+          </div>
         </el-col>
       </el-row>
       <hr>
@@ -129,24 +141,26 @@
       </div>
       <hr>
       <div class="photographer-container" id="contract">
-        <h3 class="title">Thợ chụp / quay</h3>
-        <div class="photographer-list" v-if="photographers">
-          <div class="detail-container" v-for="(item, index) of photographers" :key="index">
-            <div class="detail">
-              <img src="../../assets/img/photographer.png" alt="Si" class="detail-image">
-            </div>
-            <h4 class="detail-name">{{item.user.name}}</h4>
-            <p class="description">{{item.photographer_role}}</p>
-            <b>{{item.date_taken | dateFormat}}</b>
-            <div class="contact-container">
-              <a :href="`tel: ${item.user.phone}`"><i class="fa fa-phone" aria-hidden="true"></i></a>
-              <a target="_blank" href="https://www.fb.com/dhquan19"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>
-              <a target="_blank" href="https://www.fb.com/dhquan19"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+        <div class="over-layer">
+          <h3 class="title">Thợ chụp / quay</h3>
+          <div class="photographer-list" v-if="photographers">
+            <div class="detail-container" v-for="(item, index) of photographers" :key="index">
+              <div class="avatar">
+                <img src="../../assets/img/photographer.png" alt="Si" class="avatar-image">
+              </div>
+              <h4 class="detail-name">{{item.user.name}}</h4>
+              <p class="description">{{item.photographer_role}}</p>
+              <b>{{item.date_taken | dateFormat}}</b>
+              <div class="contact-container">
+                <a :href="`tel: ${item.user.phone}`"><i class="fa fa-phone" aria-hidden="true"></i></a>
+                <a target="_blank" href="https://www.fb.com/dhquan19"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>
+                <a target="_blank" href="https://www.fb.com/dhquan19"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="no-photo" v-if="photographers.length == 0">
-          <p>Chưa rõ thợ chụp</p>
+          <div class="no-photo" v-if="photographers.length == 0">
+            <p>Chưa rõ thợ chụp</p>
+          </div>
         </div>
       </div>
       <hr>
@@ -287,10 +301,72 @@ hr {
 
   }
 }
+.contracts-form {
+  width: 70%;
+  margin: 0 auto;
+  box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.5);
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 3px;
+  padding: 2rem 3rem;
+  min-height: 60vh;
+  .avatar {
+    width: 10rem;
+    height: 10rem;
+    border-radius: 50%;
+    shape-outside: circle(50% at 50% 50%);
+    overflow: hidden;
+    position: relative;
+  }
+}
+.tag {
+  color: white;
+  font-weight: bold;
+  margin: 0 0 10px 10px;
+  &-danger {
+    background: #F56C6C;
+  }
+  &-primary {
+    background: #409EFF
+  }
+}
+
+.avatar {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 95%;
+  shape-outside: circle(50% at 50% 50%);
+  overflow: hidden;
+  position: relative;
+  &:hover {
+    .avatar-image {
+      -webkit-transform: scale(1.1);
+      transform: scale(1.1);
+      vertical-align: middle;
+    }
+  }
+  &-image {
+    height: 100%;
+    backface-visibility: hidden;
+    transition: all 0.2s;
+    width: 100%;
+    object-fit: cover;
+    -webkit-transition: all 0.6s;
+    transition: all 0.6s;
+  }
+}
+.over-layer {
+  height: 100%;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+}
 .photographer-container {
     position: relative;
     height: 450px;
-    background: #f0f0f0;
+    background-image: url(../../assets/img/main.jpg);
+    color: white;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: bottom;
+    background-repeat: no-repeat;
     .title {
       text-align: center;
       padding: 30px 0 50px 0;
@@ -300,34 +376,10 @@ hr {
       justify-content: space-around;
       .detail-container {
         text-align: center;
-        .detail {
-          width: 10rem;
-          height: 10rem;
-          border-radius: 50%;
-          shape-outside: circle(50% at 50% 50%);
-          overflow: hidden;
-          position: relative;
-          &:hover {
-              .detail-image {
-                -webkit-transform: scale(1.1);
-                transform: scale(1.1);
-                vertical-align: middle;
-              }
-            }
-          &-image {
-            height: 100%;
-            backface-visibility: hidden;
-            transition: all 0.2s;
-            width: 100%;
-            object-fit: cover;
-            -webkit-transition: all 0.6s;
-            transition: all 0.6s;
-          }
-          &-name {
-            padding-top: 20px;
-            font-weight: bold;
-            font-size: larger;
-          }
+        .detail-name {
+          padding-top: 20px;
+          font-weight: bold;
+          font-size: larger;
         }
         .contact-container {
           display: flex;
@@ -374,7 +426,6 @@ hr {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.2);
   }
 }
 </style>
