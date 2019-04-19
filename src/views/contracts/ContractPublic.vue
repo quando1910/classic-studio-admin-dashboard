@@ -2,12 +2,9 @@
 <div class="public-contract">
     <div class="contract" v-if="contract">
       <div class="center-head background-head">
-        <div class="container">
+        <div class="container head-meta">
         <h2>HỢP ĐỒNG ĐIỆN TỬ</h2>
         <h5>eBillings</h5>
-        <router-link tag="a" :to="`/contracts/${$route.params.id}`">
-          <p>Đi đến hệ thống chăm sóc khách hàng tại đây</p>
-        </router-link>
         <div class="header__logo"><a href="/home"><img src="../../assets/img/logo-main-black.png" style="width: 150px;" alt=""/></a></div>
         <h5>Mã code hoá đơn:  <b style="text-transform: uppercase"> {{contract.code}} </b></h5>
         <b>Tình trạng ảnh:</b>
@@ -36,11 +33,16 @@
         <el-tag type="warning" v-if="contract.print_status == 1">Xử lý File</el-tag>
         <el-tag type="primary" v-if="contract.print_status == 2">In ảnh xong, chờ giao</el-tag>
         <el-tag type="success" v-if="contract.print_status == 3">Đã giao ảnh</el-tag><br>
+      
       </div>
       </div>
-      <hr>
       <el-row>
-        <h3 class="center-head">Thông tin hợp đồng</h3>
+        <h3 style="margin-top: 20px" class="center-head">
+          Thông tin hợp đồng<br>
+          <router-link class="center-head" tag="a" :to="`/contracts/${$route.params.id}`">
+            <span class="gotoUrl">Đi đến hệ thống chăm sóc khách hàng tại đây</span>
+          </router-link>
+        </h3>
         <el-col class="center-head" :span="12">
           <h4 >Bên A</h4>
           <label>Họ và Tên: </label><b>  Đỗ Hồng Quân  </b><a target="_blank" href="https://www.fb.com/dhquan19"><i class="fa fa-facebook-official" aria-hidden="true"></i></a><br>
@@ -127,21 +129,22 @@
           </el-col>
         </el-row>
       </div>
-      <hr>
-      <div class="photographer-container" id="contract">
-        <h3 class="title">Thợ chụp / quay</h3>
-        <div class="photographer-list" v-if="photographers">
-          <div class="detail-container" v-for="(item, index) of photographers" :key="index">
-            <div class="detail">
-              <img src="../../assets/img/photographer.png" alt="Si" class="detail-image">
-            </div>
-            <h4 class="detail-name">{{item.user.name}}</h4>
-            <p class="description">{{item.photographer_role}}</p>
-            <b>{{item.date_taken | dateFormat}}</b>
-            <div class="contact-container">
-              <a :href="`tel: ${item.user.phone}`"><i class="fa fa-phone" aria-hidden="true"></i></a>
-              <a target="_blank" href="https://www.fb.com/dhquan19"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>
-              <a target="_blank" href="https://www.fb.com/dhquan19"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+      <div class="photographer-container photo-back" id="contract">
+        <div class="container photo-meta">
+          <h3 class="title">Thợ chụp / quay</h3>
+          <div class="photographer-list" v-if="photographers">
+            <div class="detail-container" v-for="(item, index) of photographers" :key="index">
+              <div class="detail">
+                <img src="../../assets/img/photographer.png" alt="Si" class="detail-image">
+              </div>
+              <h4 class="detail-name">{{item.user.name}}</h4>
+              <span class="description">{{item.photographer_role}}</span><br>
+              <b>{{item.date_taken | dateFormat}}</b>
+              <div class="contact-container">
+                <a :href="`tel: ${item.user.phone}`"><i class="fa fa-phone" aria-hidden="true"></i></a>
+                <a target="_blank" href="https://www.fb.com/dhquan19"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>
+                <a target="_blank" href="https://www.fb.com/dhquan19"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+              </div>
             </div>
           </div>
         </div>
@@ -287,24 +290,39 @@ hr {
 
   }
 }
+.fa {
+  font-size: 25px;
+}
+.gotoUrl {
+  font-size: 15px;
+}
 .photographer-container {
     position: relative;
     height: 450px;
     background: #f0f0f0;
+    .container {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
     .title {
       text-align: center;
       padding: 30px 0 50px 0;
     }
     .photographer-list {
       display: flex;
-      justify-content: space-around;
+      justify-content: space-evenly;
       .detail-container {
         text-align: center;
+        padding: 20px 40px;
+        background-color: rgba(255,255,255, 0.3);
+        border-radius: 10px;
         .detail {
           width: 10rem;
           height: 10rem;
+          background-color: white;
           border-radius: 50%;
           shape-outside: circle(50% at 50% 50%);
+          border: 2px solid white;
           overflow: hidden;
           position: relative;
           &:hover {
@@ -362,11 +380,14 @@ hr {
   margin: 20px 0;
 }
 .background-head {
-  color: white;
   background-image: url(../../assets/img/main.jpg);
   background-size: cover;
-  background-position: bottom;
+  background-position: center;
   position: relative;
+  height: 520px;
+  .head-meta {
+    position: relative;
+  }
   &:before {
     content: '';
     position: absolute;
@@ -374,7 +395,34 @@ hr {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.2);
+    background: rgba(255,255,255, 0.7);
   }
+}
+.photo-back {
+  background-image: url(../../assets/img/photo-back.jpg);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  position: relative;
+  .photo-meta {
+    position: relative;
+    color: white;
+  }
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0, 0.7);
+  }
+}
+
+
+.el-tag {
+  font-weight: 700;
+  background-color: rgba(255,255,255,0.6);
 }
 </style>
