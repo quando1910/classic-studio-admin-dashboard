@@ -11,9 +11,7 @@ export class APIService
       function ( error )
       {
         // handle error
-        console.log( 'interceptors', error.response.status );
         if ( error.response && error.response.status === 401 ) {
-          this.$router.push( '/' );
           return Promise.reject( error );
         }
       } );
