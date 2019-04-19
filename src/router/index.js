@@ -1,81 +1,82 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import { AuthService } from '../service/authService.js'
 
 // Containers
-const DefaultContainer = () => import('@/containers/DefaultContainer')
+const DefaultContainer = () => import( '@/containers/DefaultContainer' )
 
 // Views
-const Dashboard = () => import('@/views/Dashboard')
+const Dashboard = () => import( '@/views/Dashboard' )
 
-const Colors = () => import('@/views/theme/Colors')
-const Typography = () => import('@/views/theme/Typography')
+const Colors = () => import( '@/views/theme/Colors' )
+const Typography = () => import( '@/views/theme/Typography' )
 
-const Charts = () => import('@/views/Charts')
-const Widgets = () => import('@/views/Widgets')
+const Charts = () => import( '@/views/Charts' )
+const Widgets = () => import( '@/views/Widgets' )
 
 // Views - Components
-const Cards = () => import('@/views/base/Cards')
-const Forms = () => import('@/views/base/Forms')
-const Switches = () => import('@/views/base/Switches')
-const Tables = () => import('@/views/base/Tables')
-const Tabs = () => import('@/views/base/Tabs')
-const Breadcrumbs = () => import('@/views/base/Breadcrumbs')
-const Carousels = () => import('@/views/base/Carousels')
-const Collapses = () => import('@/views/base/Collapses')
-const Jumbotrons = () => import('@/views/base/Jumbotrons')
-const ListGroups = () => import('@/views/base/ListGroups')
-const Navs = () => import('@/views/base/Navs')
-const Navbars = () => import('@/views/base/Navbars')
-const Paginations = () => import('@/views/base/Paginations')
-const Popovers = () => import('@/views/base/Popovers')
-const ProgressBars = () => import('@/views/base/ProgressBars')
-const Tooltips = () => import('@/views/base/Tooltips')
+const Cards = () => import( '@/views/base/Cards' )
+const Forms = () => import( '@/views/base/Forms' )
+const Switches = () => import( '@/views/base/Switches' )
+const Tables = () => import( '@/views/base/Tables' )
+const Tabs = () => import( '@/views/base/Tabs' )
+const Breadcrumbs = () => import( '@/views/base/Breadcrumbs' )
+const Carousels = () => import( '@/views/base/Carousels' )
+const Collapses = () => import( '@/views/base/Collapses' )
+const Jumbotrons = () => import( '@/views/base/Jumbotrons' )
+const ListGroups = () => import( '@/views/base/ListGroups' )
+const Navs = () => import( '@/views/base/Navs' )
+const Navbars = () => import( '@/views/base/Navbars' )
+const Paginations = () => import( '@/views/base/Paginations' )
+const Popovers = () => import( '@/views/base/Popovers' )
+const ProgressBars = () => import( '@/views/base/ProgressBars' )
+const Tooltips = () => import( '@/views/base/Tooltips' )
 
 // Views - Buttons
-const StandardButtons = () => import('@/views/buttons/StandardButtons')
-const ButtonGroups = () => import('@/views/buttons/ButtonGroups')
-const Dropdowns = () => import('@/views/buttons/Dropdowns')
-const BrandButtons = () => import('@/views/buttons/BrandButtons')
+const StandardButtons = () => import( '@/views/buttons/StandardButtons' )
+const ButtonGroups = () => import( '@/views/buttons/ButtonGroups' )
+const Dropdowns = () => import( '@/views/buttons/Dropdowns' )
+const BrandButtons = () => import( '@/views/buttons/BrandButtons' )
 
 // Views - Icons
-const Flags = () => import('@/views/icons/Flags')
-const FontAwesome = () => import('@/views/icons/FontAwesome')
-const SimpleLineIcons = () => import('@/views/icons/SimpleLineIcons')
-const CoreUIIcons = () => import('@/views/icons/CoreUIIcons')
+const Flags = () => import( '@/views/icons/Flags' )
+const FontAwesome = () => import( '@/views/icons/FontAwesome' )
+const SimpleLineIcons = () => import( '@/views/icons/SimpleLineIcons' )
+const CoreUIIcons = () => import( '@/views/icons/CoreUIIcons' )
 
 // Views - Notifications
-const Alerts = () => import('@/views/notifications/Alerts')
-const Badges = () => import('@/views/notifications/Badges')
-const Modals = () => import('@/views/notifications/Modals')
+const Alerts = () => import( '@/views/notifications/Alerts' )
+const Badges = () => import( '@/views/notifications/Badges' )
+const Modals = () => import( '@/views/notifications/Modals' )
 
 // Views - Pages
-const Page404 = () => import('@/views/pages/Page404')
-const Page500 = () => import('@/views/pages/Page500')
-const Login = () => import('@/views/pages/Login')
-const Register = () => import('@/views/pages/Register')
+const Page404 = () => import( '@/views/pages/Page404' )
+const Page500 = () => import( '@/views/pages/Page500' )
+const Login = () => import( '@/views/pages/Login' )
+const Register = () => import( '@/views/pages/Register' )
 
 // Users
-const Users = () => import('@/views/users/Users')
-const User = () => import('@/views/users/User')
+const Users = () => import( '@/views/users/Users' )
+const User = () => import( '@/views/users/User' )
 
 
 ///////////////
-const ContractNew = () => import('@/views/contracts/ContractNew')
-const ContractSearch = () => import('@/views/contracts/ContractSearch')
-const ContractSchedule = () => import('@/views/contracts/ContractSchedule')
-const ContractPublic = () => import('@/views/contracts/ContractPublic')
-const ContractPayment = () => import('@/views/contracts/ContractPayment')
-const Photographers = () => import('@/views/photographers/Photographers')
-const PhotographerSchedule = () => import('@/views/photographers/PhotographerSchedule')
+const ContractNew = () => import( '@/views/contracts/ContractNew' )
+const ContractSearch = () => import( '@/views/contracts/ContractSearch' )
+const ContractSchedule = () => import( '@/views/contracts/ContractSchedule' )
+const ContractPublic = () => import( '@/views/contracts/ContractPublic' )
+const ContractPayment = () => import( '@/views/contracts/ContractPayment' )
+const Photographers = () => import( '@/views/photographers/Photographers' )
+const PhotographerSchedule = () => import( '@/views/photographers/PhotographerSchedule' )
 
 
+const auth = new AuthService();
+Vue.use( Router )
 
-Vue.use(Router)
-
-export default new Router({
+export default new Router( {
   mode: 'hash', // https://router.vuejs.org/api/#mode
   linkActiveClass: 'open active',
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ( { y: 0 } ),
   mode: 'history',
   routes: [
     {
@@ -83,50 +84,60 @@ export default new Router({
       redirect: '/dashboard',
       name: 'Home',
       component: DefaultContainer,
+      beforeEnter: auth.ifAuthenticated,
       children: [
         {
           path: '/contracts/new',
           name: 'ContractNew',
+          beforeEnter: auth.ifAuthenticated,
           component: ContractNew
         },
         {
           path: '/contracts/search',
           name: 'ContractSearch',
+          beforeEnter: auth.ifAuthenticated,
           component: ContractSearch
         },
         {
           path: '/contracts',
           name: 'ContractSchedule',
+          beforeEnter: auth.ifAuthenticated,
           component: ContractSchedule
         },
         {
           path: '/contracts/:id',
           name: 'Contract',
+          beforeEnter: auth.ifAuthenticated,
           component: ContractNew
         },
         {
           path: '/contracts/:id/payment',
           name: 'ContractPayment',
+          beforeEnter: auth.ifAuthenticated,
           component: ContractPayment
         },
         {
           path: '/photographers',
           name: 'Photographers',
+          beforeEnter: auth.ifAuthenticated,
           component: Photographers
         },
         {
           path: '/photographers/schedule',
           name: 'PhotographerSchedule',
+          beforeEnter: auth.ifAuthenticated,
           component: PhotographerSchedule
         },
         {
           path: 'forms',
           name: 'Forms',
+          beforeEnter: auth.ifAuthenticated,
           component: Forms
         },
         {
           path: 'dashboard',
           name: 'Dashboard',
+          beforeEnter: auth.ifAuthenticated,
           component: Dashboard
         },
         {
@@ -134,7 +145,7 @@ export default new Router({
           redirect: '/theme/colors',
           name: 'Theme',
           component: {
-            render (c) { return c('router-view') }
+            render ( c ) { return c( 'router-view' ) }
           },
           children: [
             {
@@ -161,9 +172,9 @@ export default new Router({
         },
         {
           path: 'users',
-          meta: { label: 'Users'},
+          meta: { label: 'Users' },
           component: {
-            render (c) { return c('router-view') }
+            render ( c ) { return c( 'router-view' ) }
           },
           children: [
             {
@@ -172,7 +183,7 @@ export default new Router({
             },
             {
               path: ':id',
-              meta: { label: 'User Details'},
+              meta: { label: 'User Details' },
               name: 'User',
               component: User,
             },
@@ -183,7 +194,7 @@ export default new Router({
           redirect: '/base/cards',
           name: 'Base',
           component: {
-            render (c) { return c('router-view') }
+            render ( c ) { return c( 'router-view' ) }
           },
           children: [
             {
@@ -273,7 +284,7 @@ export default new Router({
           redirect: '/buttons/standard-buttons',
           name: 'Buttons',
           component: {
-            render (c) { return c('router-view') }
+            render ( c ) { return c( 'router-view' ) }
           },
           children: [
             {
@@ -303,7 +314,7 @@ export default new Router({
           redirect: '/icons/font-awesome',
           name: 'Icons',
           component: {
-            render (c) { return c('router-view') }
+            render ( c ) { return c( 'router-view' ) }
           },
           children: [
             {
@@ -333,7 +344,7 @@ export default new Router({
           redirect: '/notifications/alerts',
           name: 'Notifications',
           component: {
-            render (c) { return c('router-view') }
+            render ( c ) { return c( 'router-view' ) }
           },
           children: [
             {
@@ -365,7 +376,7 @@ export default new Router({
       redirect: '/pages/404',
       name: 'Pages',
       component: {
-        render (c) { return c('router-view') }
+        render ( c ) { return c( 'router-view' ) }
       },
       children: [
         {
@@ -391,4 +402,4 @@ export default new Router({
       ]
     }
   ]
-})
+} )
