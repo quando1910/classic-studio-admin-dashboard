@@ -12,8 +12,7 @@
       <el-menu
       default-active="2"
       class="el-menu-vertical-demo"
-      @open="handleOpen"
-      @close="handleClose">
+      >
       <el-menu-item index="1">
         <a target="_blank" href="http://www.theclassic.studio">
           Trang chủ
@@ -191,46 +190,58 @@
           <el-col :xs="24" :span="12">
             <h5 class="price-contract">Các gói dịch vụ đã chọn</h5>
             <el-table
-              :data="tableData"
+              :data="contract.budgets.filter(x => x.budgetable_type === 'Package' && x.budgetable.kind_package == 1)"
               style="width: 100%">
               <el-table-column
-                prop="name"
                 label="Tên cụ thể"
                 width="180">
+                <template slot-scope="scope">
+                  <p>{{scope.row.budgetable.name}}</p>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="type"
                 label="Cách tính tiền">
+                <template slot-scope="scope">
+                  <p>{{statusCalc[scope.row.budgetable.package_type]}}</p>
+                </template>
               </el-table-column>
             </el-table>
             <h5 class="price-contract">Những gói mở rộng</h5>
             <el-table
-              :data="tableData"
+              :data="contract.budgets.filter(x => x.budgetable_type === 'Package' && x.budgetable.kind_package > 1)"
               style="width: 100%">
               <el-table-column
-                prop="name"
                 label="Tên cụ thể"
                 width="180">
+                <template slot-scope="scope">
+                  <p>{{scope.row.budgetable.name}}</p>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="type"
                 label="Cách tính tiền">
+                <template slot-scope="scope">
+                  <p>{{statusCalc[scope.row.budgetable.package_type]}}</p>
+                </template>
               </el-table-column>
             </el-table>
             <h5 class="price-contract">Phát sinh</h5>
-            <el-table
+            <!-- <el-table
               :data="tableData"
               style="width: 100%">
               <el-table-column
-                prop="name"
                 label="Tên cụ thể"
                 width="180">
+                <template slot-scope="scope">
+                  <p>{{scope.row.budgetable.name}}</p>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="type"
                 label="Cách tính tiền">
+                <template slot-scope="scope">
+                  <p>{{statusCalc[scope.row.budgetable.package_type]}}</p>
+                </template>
               </el-table-column>
-            </el-table>
+            </el-table> -->
           </el-col>
         </el-row>
       </div>
@@ -335,6 +346,7 @@ export default {
   data() {
     return {
       activeNames: ['1', '2', '3', '4'],
+      statusCalc: ['Tính theo đầu người', 'Tính theo gói'],
       contract: null,
       photographers: [],
       messageWhenNoItems: 'There are not items',
@@ -485,9 +497,9 @@ hr {
 .contracts-form {
   width: 80%;
   margin: 0 auto;
-  box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.5);
+  border-style: dashed;
+  border-radius: 20px;
   background-color: rgba(255, 255, 255, 0.6);
-  border-radius: 3px;
   padding: 2rem 1rem;
   min-height: 240px;
   .avatar {
@@ -657,6 +669,8 @@ hr {
   background-image: url(../../assets/img/main.jpg);
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   position: relative;
   height: 520px;
   .head-meta {
