@@ -3,7 +3,7 @@
     <div class="title-button m-b-10">
       <el-row class="w-100">
         <el-col :span="16">
-          <h3>Tìm kiếm hợp đồng</h3>
+          <h3>Danh sách & Tìm kiếm Đồ đạc</h3>
         </el-col>
         <el-col :span="8">
           <el-input
@@ -14,35 +14,36 @@
         </el-col>
       </el-row>
     </div>
-    <el-table v-loading="loading" :data="tableData" style="width: 100%">
+    <el-table
+      v-loading="loading" 
+      :data="costumes.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+      style="width: 100%">
       <el-table-column prop="id" label="ID" width="80"></el-table-column>
-      <el-table-column prop="member.name" label="Người đại diện" width="200">
-      </el-table-column>
-        <el-table-column prop="member.phone_number" label="SĐT" width="200">
-      </el-table-column>
-      <el-table-column label="Hợp đồng">
+      <el-table-column prop="name" label="Tên trang phục" width></el-table-column>
+      <el-table-column prop="total" label="Tổng số lượng" width="180"></el-table-column>
+      <el-table-column label="Giá thuê" width="180">
         <template slot-scope="scope">
-          <p>{{scope.row.group}} - {{scope.row.school.name}}</p>
+          {{scope.row.price | dateMoney}}
         </template>
       </el-table-column>
-      <el-table-column label="Ngày chụp" width="100">
+      <el-table-column label="Giá mất" width="180">
         <template slot-scope="scope">
-          <div v-for="(date,index) of scope.row.date_takens" :key="index">
-            <span>{{date.date_taken | dateFormat}}</span>
-          </div>
+          {{scope.row.price_lost | dateMoney}}
         </template>
       </el-table-column>
-      <el-table-column prop="code" label="Mã hợp đồng" width="180"></el-table-column>
       <el-table-column
         align="right">
-        <template slot-scope="scope">
-          <el-button
+        <template slot="header" slot-scope="scope">
+          <el-input
+            v-model="search"
             size="mini"
-            @click="handleDetail(scope.row)">Sửa</el-button>
+            placeholder="Type to search"/>
+        </template>
+        <template slot-scope="scope">
           <el-button
             size="mini"
             type="success"
-            @click="handlePayment(scope.row)">Thanh toán</el-button>
+            @click="handlePayment(scope.row)">Sửa</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -61,16 +62,15 @@ export default {
       search: "",
       tableData: [],
       loading: true,
-      contracts: [],
-      dateContracts: [],
+      costumes: [],
       code: null
     };
   },
   mounted() {
-    api.get([END_POINT.contracts]).then(
+    api.get([END_POINT.properties], {property_type: 1}).then(
       data => {
-        this.contracts = data.contracts;
-        this.tableData = this.contracts;
+        this.costumes = data.properties;
+        console.log(this.costumes);
         this.loading = false;
       },
       err => {
@@ -92,6 +92,11 @@ export default {
       } else {
         this.tableData = this.contracts;
       }
+    }
+  },
+  filters: {
+    dateMoney: function(value) {
+      return parseInt(value).toLocaleString();
     }
   },
   methods: {

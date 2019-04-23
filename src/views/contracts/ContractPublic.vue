@@ -42,7 +42,7 @@
         <el-menu-item index="4-3">Nhật xét thợ chụp</el-menu-item>
       </el-submenu>
       <el-menu-item index="5">
-        <router-link class="center-head" tag="a" :to="`/contracts/${$route.params.id}`">
+        <router-link class="center-head" tag="a" :to="`/contracts/${$route.params.id}/show`">
           <el-button type="primary" class="full-width" plain size="small"><b class="el-icon-setting" ></b>Trình Quản Lý Lớp</el-button>
         </router-link><br>
       </el-menu-item>
@@ -81,10 +81,12 @@
         <el-menu-item index="2-3" disabled>Nhật xét thợ chụp</el-menu-item>
       </el-submenu>
       <el-menu-item index="6" style="float: right">
-        <router-link class="center-head" tag="a" :to="`/contracts/${$route.params.id}`">
+        <router-link class="center-head" tag="a" :to="`/contracts/${$route.params.id}/show`">
           <el-button type="primary" plain size="small"><b class="el-icon-setting" ></b>Trình Quản Lý Lớp</el-button>
         </router-link>
-        <el-button type="success" plain size="small"><b class="el-icon-document"></b>Thanh Toán</el-button>
+        <router-link class="center-head" tag="a" :to="`/contracts/${$route.params.id}/payment`">
+          <el-button type="success" plain size="small"><b class="el-icon-document"></b>Thanh Toán</el-button>
+        </router-link><br>
       </el-menu-item>
     </el-menu>
     <div class="contract" v-if="contract">
@@ -97,10 +99,10 @@
         <b>Tình trạng ảnh:</b>
         <el-tag type="danger" v-if="!contract.image_status">Thu thập file sửa</el-tag>
         <el-tag type="warning" v-if="contract.image_status == 1">Đang sửa</el-tag>
-        <el-tag type="primary" v-if="contract.image_status == 2">Up ảnh</el-tag>
+        <el-tag type="primary" v-if="contract.image_status == 2">Up ảnh sửa</el-tag>
         <el-tag type="success" v-if="contract.image_status == 3">Full ảnh Sửa</el-tag>
         <el-tag type="danger" v-if="!contract.raw_status">Thu thập file gốc</el-tag>
-        <el-tag type="primary" v-if="contract.raw_status == 1">Up ảnh</el-tag>
+        <el-tag type="primary" v-if="contract.raw_status == 1">Up ảnh gốc</el-tag>
         <el-tag type="success" v-if="contract.raw_status == 2">Full ảnh gốc</el-tag><br>
         <b>Tình trạng Thanh Toán:</b>
         <el-tag type="danger" v-if="!contract.payment_status">Chưa đặt cọc</el-tag>
@@ -154,7 +156,7 @@
                 </div>
               </el-col>
               <el-col :span="16">
-                <label>Họ và Tên: </label><b>  {{contract.name}}  </b><a target="_blank" :href="contract.member.link_facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a><br>
+                <label>Họ và Tên: </label><b>  {{contract.member.name}}  </b><a target="_blank" :href="contract.member.link_facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a><br>
                 <label>Số lượng thành viên: </label><b> {{ contract.total_member }}</b><br>
                 <label>Đại diện của: </label><b>{{contract.group}} - {{contract.school.name}}</b><br>
                 <label>SĐT: </label>
@@ -167,12 +169,12 @@
       <div id="contract center-head">
         <el-row class="container">
           <h3 class="center-head">Lịch trình</h3>
-          <el-col :xs="24" :span="12">
+          <el-col :xs="24" :span="10">
             <div v-if="contract.date_takens && contract.date_takens.length > 0">
-              <div v-for="date in contract.date_takens" :key="date.id">
+              <div v-for="date in contract.date_takens" :key="`a-${date.id}`">
                 <el-timeline style="width: 80%; margin-top: 15px">
                   <el-timeline-item
-                    v-for="(plan, ip) in date.plans" :key="ip"
+                    v-for="(plan, ip) in date.plans" :key="`a-${ip}`"
                     :timestamp="plan.plan_time | dateFormat">
                     <div v-if="plan._destroy !== 1">
                       <b>{{plan.plan_time | timeFormat}}</b>: {{plan.costume}} - {{plan.content}}
@@ -181,75 +183,99 @@
                 </el-timeline>
               </div>
             </div>
-            <div class="bonus-info">
+          </el-col>
+          <el-col :xs="24" :span="14">
+            <h5 class="price-contract">Các gói dịch vụ đã chọn</h5>
+            <el-table
+              :data="budgets.filter(x => x.type == 0)"
+              style="width: 100%">
+              <el-table-column
+                label="Tên cụ thể"
+                width="120">
+                <template slot-scope="scope">
+                  <p>{{scope.row.name}}</p>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="Cách tính tiền"
+                width="200">
+                <template slot-scope="scope">
+                  <p>{{statusCalc[scope.row.type]}}</p>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="Số lượng"
+                width="100">
+                <template slot-scope="scope">
+                  <p>{{scope.row.quantity}}</p>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="Giá">
+                <template slot-scope="scope">
+                  <p>{{scope.row.price}}</p>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="Thành tiền"
+                width="200">
+                <template slot-scope="scope">
+                  <p>{{scope.row.quantity * scope.row.price | dateMoney}}</p>
+                </template>
+              </el-table-column>
+            </el-table>
+            <h5 class="price-contract">Các nội dung phát sinh</h5>
+            <el-table
+              :data="budgets.filter(x => x.type == 1)"
+              style="width: 100%">
+              <el-table-column
+                label="Tên cụ thể"
+                width="120">
+                <template slot-scope="scope">
+                  <p>{{scope.row.name}}</p>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="Cách tính tiền"
+                width="200">
+                <template>
+                  <p>Theo số lượng thuê</p>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="Số lượng"
+                width="100">
+                <template slot-scope="scope">
+                  <p>{{scope.row.quantity}}</p>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="Giá">
+                <template slot-scope="scope">
+                  <p>{{scope.row.price}}</p>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="Thành tiền"
+                width="200">
+                <template slot-scope="scope">
+                  <p>{{scope.row.quantity * scope.row.price | dateMoney}}</p>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-col>
+          <div class="bonus-info">
             <h5 class="price-contract">Thông tin bổ sung</h5>
             <p><b>Tiền cọc:</b> {{contract.deposit}}</p>
             <b>Ghi chú:</b> <p style="white-space: pre-wrap;">{{contract.note}}</p>
-            </div>
-          </el-col>
-          <el-col :xs="24" :span="12">
-            <h5 class="price-contract">Các gói dịch vụ đã chọn</h5>
-            <el-table
-              :data="contract.budgets.filter(x => x.budgetable_type === 'Package' && x.budgetable.kind_package == 1)"
-              style="width: 100%">
-              <el-table-column
-                label="Tên cụ thể"
-                width="180">
-                <template slot-scope="scope">
-                  <p>{{scope.row.budgetable.name}}</p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="Cách tính tiền">
-                <template slot-scope="scope">
-                  <p>{{statusCalc[scope.row.budgetable.package_type]}}</p>
-                </template>
-              </el-table-column>
-            </el-table>
-            <h5 class="price-contract">Những gói mở rộng</h5>
-            <el-table
-              :data="contract.budgets.filter(x => x.budgetable_type === 'Package' && x.budgetable.kind_package > 1)"
-              style="width: 100%">
-              <el-table-column
-                label="Tên cụ thể"
-                width="180">
-                <template slot-scope="scope">
-                  <p>{{scope.row.budgetable.name}}</p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="Cách tính tiền">
-                <template slot-scope="scope">
-                  <p>{{statusCalc[scope.row.budgetable.package_type]}}</p>
-                </template>
-              </el-table-column>
-            </el-table>
-            <h5 class="price-contract">Phát sinh</h5>
-            <!-- <el-table
-              :data="tableData"
-              style="width: 100%">
-              <el-table-column
-                label="Tên cụ thể"
-                width="180">
-                <template slot-scope="scope">
-                  <p>{{scope.row.budgetable.name}}</p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="Cách tính tiền">
-                <template slot-scope="scope">
-                  <p>{{statusCalc[scope.row.budgetable.package_type]}}</p>
-                </template>
-              </el-table-column>
-            </el-table> -->
-          </el-col>
+          </div>
         </el-row>
       </div>
       <div class="photographer-container photo-back" id="contract">
         <div class="container photo-meta">
           <h3 class="title">Thợ chụp / quay</h3>
           <div class="photographer-list" v-if="photographers">
-            <div class="detail-container" v-for="(item, index) of photographers" :key="index">
+            <div class="detail-container" v-for="(item, index) of photographers" :key="`b-${index}`">
               <div class="detail">
                 <img src="../../assets/img/photographer.png" alt="Si" class="detail-image">
               </div>
@@ -348,6 +374,7 @@ export default {
       activeNames: ['1', '2', '3', '4'],
       statusCalc: ['Tính theo đầu người', 'Tính theo gói'],
       contract: null,
+      budgets: [],
       photographers: [],
       messageWhenNoItems: 'There are not items',
       tableData: [{
@@ -404,6 +431,19 @@ export default {
     apiService.get(['contracts', this.$route.params.id]).then(data => {
       if(data.contract.secret_key === this.$route.query.code ) {
         this.contract = data.contract;
+        data.contract.budgets.forEach(x => {
+        if(x.price) {
+          let obj = {};
+          obj.type = x.budgetable_type === 'Package' ? 0 : 1;
+          obj.name = x.budgetable.name;
+          obj.quantity = x.quantity;
+          obj.id = x.id;
+          obj.price = x.price;
+          obj.note = x.note;
+          obj.total = obj.quantity * obj.price;
+          this.budgets.push(obj);
+        }
+      });
         this.contract.date_takens.forEach(x => {
           let a = x.photographer_date_takens.map(y => ({...y, date_taken: x.date_taken}));
           this.photographers = [...this.photographers, ...a];
@@ -694,6 +734,7 @@ hr {
   background-repeat: no-repeat;
   position: relative;
   .photo-meta {
+    height: 100%;
     position: relative;
     color: white;
   }

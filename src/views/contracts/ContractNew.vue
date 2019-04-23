@@ -1,5 +1,94 @@
 <template>
   <div class="animated fadeIn">
+    <b-row v-if="this.id">
+      <b-col sm="12">
+        <b-card>
+          <div slot="header">
+            <strong>Cập nhật trạng thái</strong>
+          </div>
+           <el-row>
+            <el-col :span="1">
+              <label for="name">File sửa: </label>
+            </el-col>
+            <el-col :span="3" style="padding-right: 20px">
+              <el-select v-model="contract.image_status" placeholder="Select">
+                <el-option
+                  v-for="item in blendStatus"
+                  :key="`as-${item.value}`"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="1">
+              <label for="name">File gốc: </label>
+            </el-col>
+            <el-col :span="3" style="padding-right: 20px">
+              <el-select v-model="contract.raw_status" placeholder="Select">
+                <el-option
+                  v-for="item in rawStatus"
+                  :key="`bs-${item.value}`"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="1">
+              <label for="name">Video: </label>
+            </el-col>
+            <el-col :span="3" style="padding-right: 20px">
+              <el-select v-model="contract.video_status" placeholder="Select">
+                <el-option
+                  v-for="item in videoStatus"
+                  :key="`cs-${item.value}`"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="1">
+              <label for="name">Trang phục: </label>
+            </el-col>
+            <el-col :span="3" style="padding-right: 20px" >
+              <el-select v-model="contract.clothes_status" placeholder="Select">
+                <el-option
+                  v-for="item in clothesStatus"
+                  :key="`ds-${item.value}`"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="1">
+              <label for="name">Thanh toán: </label>
+            </el-col>
+            <el-col :span="3" style="padding-right: 20px">
+              <el-select v-model="contract.payment_status" placeholder="Select">
+                <el-option
+                  v-for="item in paymentStatus"
+                  :key="`es-${item.value}`"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="1">
+              <label for="name">Ảnh in: </label>
+            </el-col>
+            <el-col :span="2">
+              <el-select v-model="contract.print_status" placeholder="Select">
+                <el-option
+                  v-for="item in printStatus"
+                  :key="`fs-${item.value}`"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-col>
+          </el-row>
+        </b-card>
+      </b-col>
+    </b-row>
     <b-row>
       <b-col sm="6">
         <b-card>
@@ -56,8 +145,8 @@
                 <label for="ccnumber">Trường</label> <br>
                  <el-select v-model="contract.school_id" placeholder="Select" class="full-width">
                   <el-option
-                    v-for="school in schools"
-                    :key="school.id"
+                    v-for="(school, schoodIndex) in schools"
+                    :key="`a-${schoodIndex}`"
                     :label="school.name"
                     :value="school.id"
                   ></el-option>
@@ -113,27 +202,27 @@
               placeholder
               class="input-contract w-100">
               <el-option
-                v-for="p in packages"
-                :key="p.id"
+                v-for="(p, i) in packages"
+                :key="`c-${i}`"
                 :label="p.name"
                 :value="p.id"
-                :disabled="priorities.includes(p.priority)"
+                :disabled="p.priority < 3 && priorities.includes(p.priority)"
               ></el-option>
             </el-select>
           </b-form-group>
           <b-form-group>
             <label for="vat">Danh sách đồ đi kèm</label><br>
-            <el-tag type="success" v-for="sp in subProperty" :key="sp.id">{{sp.name}}</el-tag>
+            <el-tag type="success" v-for="(sp,index1) in subProperty" :key="`d-${index1}`">{{sp.name}}</el-tag>
           </b-form-group>
           <b-form-group>
-            <label for="vat">Trang phục concept</label><br>
+            <label for="vat">Phụ kiện book thêm</label><br>
              <el-select
                 @change="setMorePropety"
                 v-model="propertyMore"
                 multiple
                 placeholder
                class="full-width">
-                <el-option v-for="p in properties" :key="p.id" :label="p.name" :value="p.id"></el-option>
+                <el-option v-for="(p,index2) in properties" :key="`e-${index2}`" :label="p.name" :value="p.id"></el-option>
               </el-select>
           </b-form-group>
           <b-row>
@@ -164,32 +253,32 @@
             <strong>Lịch trình</strong>
           </div>
             <b-form-group
-              v-for="(d,i) in contract.date_takens_attributes"
-              :key="i"
-              :label="`Ngày chụp ${i+1}`"
+              v-for="(d,index3) in contract.date_takens_attributes"
+              :key="`f-${index3}`"
+              :label="`Ngày chụp ${index3+1}`"
               label-for="basicName"
               :label-cols="3"
               :horizontal="true">
               <el-date-picker
-                @change="updateDateTaken($event, i, d.id)"
+                @change="updateDateTaken($event, index3, d.id)"
                 class="input-contract input-contract--time"
                 v-model="d.date_taken"
                 type="date"
                 placeholder="Pick a day"
               ></el-date-picker>
-              <el-button class="margin-10" v-if="i == 0" type="primary" icon="el-icon-plus" circle @click="addDate()"></el-button>
-              <el-button class="margin-10" v-if="i != 0" @click="deleteDate(i, d)" type="danger" icon="el-icon-minus" circle></el-button>
+              <el-button class="margin-10" v-if="index3 == 0" type="primary" icon="el-icon-plus" circle @click="addDate()"></el-button>
+              <el-button class="margin-10" v-if="index3 != 0" @click="deleteDate(i, d)" type="danger" icon="el-icon-minus" circle></el-button>
             </b-form-group>
             <label for="ccnumber">Lịch trình</label>
             <el-tabs type="card" v-if="contract.date_takens_attributes[0].date_taken != ''">
               <el-tab-pane
-                v-for="(date, index) in this.contract.date_takens_attributes"
-                :key="index"
+                v-for="(date, index4) in this.contract.date_takens_attributes"
+                :key="`g-${index4}`"
                 :label="'Ngày '+ getDate(date.date_taken)">
                 <el-button class="to-the-right" type="warning" icon="el-icon-edit" @click="openPlanDialog(date)" circle></el-button>
                 <el-timeline :reverse="reverse" style="width: 80%; margin-top: 15px">
                   <el-timeline-item
-                    v-for="(plan, ip) in date.plans_attributes" :key="ip"
+                    v-for="(plan, ip) in date.plans_attributes" :key="`h-${ip}`"
                     :timestamp="plan.plan_time">
                     <div v-if="plan._destroy !== 1">
                       <b>{{plan.plan_time}}</b>: {{plan.costume[0]}} - {{plan.content}}
@@ -233,9 +322,9 @@
             </b-col>
             <b-col sm="6">
                 <b>Ngày chụp:</b><br>
-                <p v-for="(item, index) of contract.date_takens_attributes" :key="index">+ {{getDate(item.date_taken)}}</p>
+                <p v-for="(item, index5) of contract.date_takens_attributes" :key="`i-${index5}`">+ {{getDate(item.date_taken)}}</p>
                 <b>Gói chụp cụ thể:</b><br>
-                <p v-for="(item, index) of packages.filter(x => package_id.includes(x.id))" :key="index">+ {{item.name}}</p>
+                <p v-for="(item, index6) of packages.filter(x => package_id.includes(x.id))" :key="`k-${index6}`">+ {{item.name}}</p>
                 <b>Thành tiền tạm tính:</b>
                 <span>1</span><br>
                 <b>Đặt cọc:</b>
@@ -277,8 +366,8 @@
             class="input-contract w-100"
           >
             <el-option
-              v-for="dp in dateProperty"
-              :key="dp.name"
+              v-for="(dp, index7) in dateProperty"
+              :key="`l-${index7}`"
               :label="dp.name"
               :value="dp.name"
             ></el-option>
@@ -304,6 +393,98 @@ export default {
   data () {
     return {
       //----
+      blendStatus: [
+        {
+          value: 0,
+          label: 'Thu thập file sửa'
+        },
+        {
+          value: 1,
+          label: 'Đang sửa'
+        },
+        {
+          value: 2,
+          label: 'Up ảnh'
+        },
+        {
+          value: 3,
+          label: 'Full ảnh sửa'
+        }
+      ],
+      rawStatus: [
+        {
+          value: 0,
+          label: 'Thu thập file gốc'
+        },
+        {
+          value: 1,
+          label: 'Up ảnh'
+        },
+        {
+          value: 2,
+          label: 'Full ảnh gốc'
+        }
+      ],
+      videoStatus: [
+        {
+          value: 0,
+          label: 'Thu thập video'
+        },
+        {
+          value: 1,
+          label: 'Đang sửa'
+        },
+        {
+          value: 2,
+          label: 'Up video'
+        },
+         {
+          value: 3,
+          label: 'Full video'
+        }
+      ],
+      clothesStatus: [
+        {
+          value: 0,
+          label: 'Chưa trả xong'
+        },
+        {
+          value: 1,
+          label: 'Trả hết trang phục'
+        }
+      ],
+      paymentStatus: [
+        {
+          value: 0,
+          label: 'Chưa đặt cọc'
+        },
+        {
+          value: 1,
+          label: 'Đặt cọc'
+        },
+        {
+          value: 2,
+          label: 'Chưa thanh toán đủ'
+        },
+        {
+          value: 3,
+          label: 'Đã thanh toán'
+        }
+      ],
+      printStatus: [
+        {
+          value: 0,
+          label: 'Xử lý File'
+        },
+        {
+          value: 1,
+          label: 'In ảnh xong, chờ giao'
+        },
+        {
+          value: 2,
+          label: 'Đã giao ảnh'
+        }
+      ],
       formLabelWidth: '120px',
       plan: {
         id: null,
@@ -355,6 +536,12 @@ export default {
       contract: {
         name: "",
         group: "",
+        image_status: 0,
+        print_status: 0,
+        payment_status: 0,
+        clothes_status: 0,
+        raw_status: 0,
+        video_status: 0,
         school_id: "",
         note: "",
         secret_key: "",
@@ -513,7 +700,7 @@ export default {
         api.put([END_POINT.contracts, this.id], this.contract).then(
           data => {
             this.loading = false;
-            this.$router.push(`/contracts/${this.id}`);
+            this.$router.push(`/contracts/${this.id}/show`);
           },
           err => {
             this.loading = false;
@@ -669,6 +856,12 @@ export default {
       this.contract.deposit = data.deposit;
       this.contract.school_id = data.school_id;
       this.contract.secret_key = data.secret_key;
+      this.contract.video_status = data.video_status;
+      this.contract.clothes_status = data.clothes_status;
+      this.contract.payment_status = data.payment_status;
+      this.contract.image_status = data.image_status;
+      this.contract.print_status = data.print_status;
+      this.contract.raw_status = data.raw_status;
       this.budgets = data.budgets;
       if (data.packages.length > 0) {
         this.package_id = data.packages.map(x => x.id);
@@ -725,6 +918,9 @@ export default {
     }
   },
   mounted() {
+    window.onbeforeunload = () => {
+      return 'If you resubmit this page, progress will be lost.';
+    };
     this.id = this.$router.history.current.params.id;
     api
       .multipeGets([

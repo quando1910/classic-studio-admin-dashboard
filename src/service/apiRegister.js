@@ -10,6 +10,7 @@ export const END_POINT = {
   registerMember: 'member_registrations',
   photographers: 'users/photographers',
   members: 'members',
+  properties: 'properties',
   date_takens: 'date_takens',
   photographerDateTakens:'photographer_date_takens'
 };

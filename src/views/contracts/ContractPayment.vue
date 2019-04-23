@@ -25,15 +25,16 @@
         label="Chú thích"
         width="180">
         <template slot-scope="scope">
-          <input v-model="scope.row.note">
+          <p v-if="contract.paid_at">{{scope.row.note}}</p>
+          <input v-else v-model="scope.row.note">
         </template>
       </el-table-column>
       <el-table-column
         prop="quantity"
         label="Số lượng">
         <template slot-scope="scope">
-          <p v-if="scope.row.type === 0">{{scope.row.quantity}}</p>
-          <input v-if="scope.row.type === 1" v-model="scope.row.quantity">
+          <p v-if="scope.row.type === 0 || contract.paid_at">{{scope.row.quantity}}</p>
+          <input v-if="scope.row.type === 1 && !contract.paid_at" v-model="scope.row.quantity">
         </template>
       </el-table-column>
       <el-table-column
@@ -182,7 +183,7 @@ export default {
       let payment = {};
       payment.budgets_attributes = this.budgets;
       payment.paid_at = new Date();
-      payment.payment_status = 2;
+      payment.payment_status = 3;
       api.put([END_POINT.contracts, this.$route.params.id], payment).then(
         data => {
           this.$message({

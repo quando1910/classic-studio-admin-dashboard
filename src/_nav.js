@@ -138,7 +138,7 @@ export default {
         },
         {
           name: 'Danh sách tổng',
-          url: '/base/breadcrumbs',
+          url: '/inventories',
           icon: 'icon-puzzle'
         }
         // {

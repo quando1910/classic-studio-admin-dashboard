@@ -9,3 +9,18 @@
   float: right;
   z-index: 100;
 }
+.sidebar .nav-dropdown-toggle {
+  background: #0f2027; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #0f2027, #203a43, #2c5364); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+}
+.nav-item {
+  .router-link-exact-active {
+    background: #1d4350; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #1d4350, #a43931) !important; /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #1d4350, #a43931) !important;
+  }
+  .active {
+    background-color: transparent !important;
+  }
+} 

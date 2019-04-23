@@ -22,14 +22,15 @@ export class APIService
     return axios.get( API_URL ).then( response => response.data );
   }
 
-  get ( uri )
+  get ( uri, options = {} )
   {
     this.setHeader()
     const url = uri.join( '/' );
     return new Promise( ( resolve, reject ) =>
     {
-      axios.get( url )
-        .then( resp =>
+      axios.get( url, { 
+        params: options
+      }).then( resp =>
         {
           if ( resp ) {
             resolve( resp.data )

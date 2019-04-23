@@ -64,10 +64,12 @@ const User = () => import( '@/views/users/User' )
 const ContractNew = () => import( '@/views/contracts/ContractNew' )
 const ContractSearch = () => import( '@/views/contracts/ContractSearch' )
 const ContractSchedule = () => import( '@/views/contracts/ContractSchedule' )
+const ContractDetail = () => import( '@/views/contracts/ContractDetail' )
 const ContractPublic = () => import( '@/views/contracts/ContractPublic' )
 const ContractPayment = () => import( '@/views/contracts/ContractPayment' )
 const Photographers = () => import( '@/views/photographers/Photographers' )
 const PhotographerSchedule = () => import( '@/views/photographers/PhotographerSchedule' )
+const Inventories = () => import( '@/views/inventory/Inventories' )
 
 
 const auth = new AuthService();
@@ -105,8 +107,14 @@ export default new Router( {
           component: ContractSchedule
         },
         {
+          path: '/contracts/:id/show',
+          name: 'ContractDetail',
+          beforeEnter: auth.ifAuthenticated,
+          component: ContractDetail
+        },
+        {
           path: '/contracts/:id',
-          name: 'Contract',
+          name: 'ContractEdit',
           beforeEnter: auth.ifAuthenticated,
           component: ContractNew
         },
@@ -127,6 +135,12 @@ export default new Router( {
           name: 'PhotographerSchedule',
           beforeEnter: auth.ifAuthenticated,
           component: PhotographerSchedule
+        },
+        {
+          path: '/inventories',
+          name: 'Inventories',
+          beforeEnter: auth.ifAuthenticated,
+          component: Inventories
         },
         {
           path: 'forms',

@@ -92,9 +92,11 @@
               </el-table-column>
               <el-table-column prop="name" label="Hợp đồng" width="300">
                 <template slot-scope="scope">
-                  <p v-for="(item, index) of scope.row.contracts" :key="index"> 
-                    {{item.group}} - {{item.school.name}}
-                  </p>
+                  <div v-for="(item, index) of scope.row.contracts" :key="index"> 
+                    <router-link :to="`/contracts/${item.id}`">
+                      {{item.group}} - {{item.school.name}}
+                    </router-link>
+                  </div>
                 </template>
               </el-table-column>
                <el-table-column
