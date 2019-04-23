@@ -95,8 +95,11 @@
           <div slot="header">
             <strong>{{this.id ? 'Sửa' : 'Tạo mới'}} hợp đồng </strong> <small>thông tin</small>
             <el-button v-if="id" class="to-the-right" type="danger" icon="el-icon-delete" @click="handleDelete"></el-button>
-            <router-link target="_blank" :to="`/public/contracts/${$route.params.id}?code=${contract.secret_key}`">
-              <el-button v-if="id" class="to-the-right" style="margin-right: 20px" type="warning" icon="el-icon-share"></el-button>
+            <router-link v-if="id" target="_blank" :to="`/public/contracts/${$route.params.id}?code=${contract.secret_key}`">
+              <el-button class="to-the-right" style="margin-right: 20px" type="warning" icon="el-icon-share"></el-button>
+            </router-link>
+            <router-link v-if="id" :to="`/contracts/${$route.params.id}/payment`">
+              <el-button class="to-the-right" style="margin-right: 20px" type="success" icon="el-icon-document"></el-button>
             </router-link>
           </div>
           <b-row>
@@ -675,16 +678,33 @@ export default {
           });
         }
       });
-      this.properties.forEach(v => {
-        if (this.propertyMore.includes(v.id)) {
-          this.contract.budgets_attributes.push({
-            id: this.setBudgetsID(v.id, "Property"),
-            budgetable_type: "Property",
-            budgetable_id: v.id,
-            price: v.price
-          });
-        }
-      });
+      let oldProperty = this.budgets.filter(x => x.budgetable_type === 'Property');
+      console.log(33333, oldProperty);
+      let deleteProperty = oldProperty.filter(x => !this.propertyMore.includes(x.id)).map(x => ({
+        id: this.setBudgetsID(x.id, "Property"),
+        budgetable_type: "Property",
+        budgetable_id: x.id,
+        price: x.price,
+        _destroy: 1
+      }));
+      let newProperty = this.properties.filter(x => this.propertyMore.includes(x.id)).map(x => ({
+        id: this.setBudgetsID(x.id, "Property"),
+        budgetable_type: "Property",
+        budgetable_id: x.id,
+        price: x.price
+      }));
+      this.contract.budgets_attributes = [...this.contract.budgets_attributes, ...newProperty, ...deleteProperty];
+      console.log(1231231, this.contract.budgets_attributes);
+      // this.properties.forEach(v => {
+      //   if (this.propertyMore.includes(v.id)) {
+      //     this.contract.budgets_attributes.push({
+      //       id: this.setBudgetsID(v.id, "Property"),
+      //       budgetable_type: "Property",
+      //       budgetable_id: v.id,
+      //       price: v.price
+      //     });
+      //   }
+      // });
       if (!this.id) {
         console.log(this.contract);
         api.post([END_POINT.contracts], this.contract).then(
@@ -817,6 +837,7 @@ export default {
       this.setDateProperty();
     },
     setMorePropety(e) {
+      console.log(this.propertyMore);
       this.addProperty = [];
       this.properties.forEach(v => {
         if (this.propertyMore.includes(v.id)) {

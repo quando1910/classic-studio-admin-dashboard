@@ -8,6 +8,9 @@
             <router-link target="_blank" :to="`/public/contracts/${$route.params.id}?code=${contract.secret_key}`">
               <el-button v-if="id" class="to-the-right" style="margin-right: 20px" type="warning" icon="el-icon-share"></el-button>
             </router-link>
+            <router-link :to="`/contracts/${$route.params.id}`">
+              <el-button v-if="id" class="to-the-right" style="margin-right: 20px" type="primary" icon="el-icon-edit"></el-button>
+            </router-link>
           </div>
           <div v-if="contract.member">
             <b-row>

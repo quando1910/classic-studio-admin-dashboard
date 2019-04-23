@@ -3,6 +3,9 @@
     <b-col sm="12">
       <b-card>
         <div slot="header">
+           <router-link :to="`/contracts/${$route.params.id}`">
+              <el-button style="margin-right: 20px" type="primary" icon="el-icon-arrow-left"></el-button>
+            </router-link>
             <strong> Thanh Toán hợp đồng </strong> <small>thông tin</small>
             <el-button v-if="id" class="to-the-right" type="warning" icon="el-icon-delete" round @click="handleDelete"></el-button>
           </div>
