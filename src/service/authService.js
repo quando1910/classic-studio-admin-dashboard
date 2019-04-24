@@ -20,18 +20,28 @@ export class AuthService
 
   ifAuthenticated = ( to, from, next ) =>
   {
-    console.log( 'ifAuthenticated', localStorage.getItem( 'ACCESS_TOKEN' ) );
     localStorage.setItem( 'toPath', to.path )
     if ( localStorage.getItem( 'ACCESS_TOKEN' ) ) {
+      if ( this.checkPath( to.path ) ) {
+        localStorage.clear()
+        next( '/members' )
+      }
       next()
       return
     }
+    localStorage.clear()
     next( '/pages/login' )
   }
 
   getToPath ()
   {
     return localStorage.getItem( 'toPath' );
+  }
+  checkPath ( path )
+  {
+    const member = JSON.parse( localStorage.getItem( 'MEMBER' ) );
+    const paths = path.split( '/' );
+    return paths[ 1 ] !== 'members' && member && member.provider === 'member';
   }
 
   loginUser ( user )
