@@ -146,10 +146,12 @@ export default {
     loginMember() {
       const { codeContarct, phone } = this.formMember;
       auth.loginMember({ code: codeContarct, phone_number: phone }).then(
-        () => {
+        res => {
           this.formReset();
           const path = auth.getToPath();
-          if (path) {
+          if (res.data.member) {
+            this.$router.push("/members");
+          } else if (path) {
             this.$router.push(`${path}`);
           } else {
             this.$router.push("/");
