@@ -202,9 +202,9 @@
                 <el-timeline style="width: 80%; margin-top: 15px">
                   <el-timeline-item
                     v-for="(plan, ip) in date.plans" :key="`a-${ip}`"
-                    :timestamp="plan.plan_time | dateFormat">
+                    :timestamp="date.date_taken | dateFormat">
                     <div v-if="plan._destroy !== 1">
-                      <b>{{plan.plan_time | timeFormat}}</b>: {{plan.costume}} - {{plan.content}}
+                      <b>{{plan.plan_time}}</b>: {{plan.costume}} - {{plan.content}}
                     </div>
                   </el-timeline-item>
                 </el-timeline>
@@ -323,6 +323,10 @@ export default {
       this.contract.date_takens.forEach(x => {
         let a = x.photographer_date_takens.map(y => ({...y, date_taken: x.date_taken}));
         this.photographers = [...this.photographers, ...a];
+        console.log(x);
+        x.plans.forEach(p => {
+          p.plan_time = format(new Date(p.plan_time), "HH:mm");
+        });
       })
     });
   },

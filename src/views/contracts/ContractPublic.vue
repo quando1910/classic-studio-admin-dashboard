@@ -210,19 +210,6 @@
                   <p>{{scope.row.quantity}}</p>
                 </template>
               </el-table-column>
-              <el-table-column
-                label="Giá">
-                <template slot-scope="scope">
-                  <p>{{scope.row.price}}</p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="Thành tiền"
-                width="200">
-                <template slot-scope="scope">
-                  <p>{{scope.row.quantity * scope.row.price | dateMoney}}</p>
-                </template>
-              </el-table-column>
             </el-table>
             <h5 class="price-contract">Các nội dung phát sinh</h5>
             <el-table
@@ -247,19 +234,6 @@
                 width="100">
                 <template slot-scope="scope">
                   <p>{{scope.row.quantity}}</p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="Giá">
-                <template slot-scope="scope">
-                  <p>{{scope.row.price}}</p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="Thành tiền"
-                width="200">
-                <template slot-scope="scope">
-                  <p>{{scope.row.quantity * scope.row.price | dateMoney}}</p>
                 </template>
               </el-table-column>
             </el-table>
