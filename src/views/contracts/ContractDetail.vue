@@ -378,6 +378,9 @@ export default {
           date_taken: x.date_taken
         }));
         this.photographers = [...this.photographers, ...a];
+        x.plans.forEach(p => {
+          p.plan_time = format(new Date(p.plan_time), "HH:mm");
+        });
       });
     });
   },

@@ -159,7 +159,10 @@
             <el-col :span="12">
               <h4>Chọn thợ chụp cho lớp</h4>
               <el-form :model="photoAssign">
-                Ngày chụp: <b>{{chooseDate | dateFormat}}</b>
+                Ngày chụp: <b>{{chooseDate | dateFormat}}</b><br>
+                Lưu ý: <br>
+                <b v-if="item.packages.filter(x => x.id == 6).length">- Có chụp đêm.</b><br>
+                <b v-if="item.packages.filter(x => x.id == 7 || x.id == 8).length">- Có quay video.</b>
                 <el-form-item label="Thợ chụp">
                   <el-select
                     v-if="photographers"

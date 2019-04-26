@@ -45,7 +45,10 @@
               <b :class="item.packages.filter(x => x.kind_package === 2).length ? 'orange' : ''"><font-awesome-icon :icon="'star'"/></b>
               <b :class="item.packages.filter(x => x.kind_package === 3).length ? 'red' : ''"><font-awesome-icon :icon="'video'"/></b>
               <b :class="item.packages.filter(x => x.kind_package === 4).length ? 'green' : ''"><font-awesome-icon :icon="'campground'"/></b>
-              {{item.group}} - {{item.school.name}} </p>
+              <router-link :to="`/contracts/${item.id}`">
+                <span>{{item.group}} - {{item.school.name}}</span>
+              </router-link>
+            </p>
           </template>
         </el-table-column>
       </el-table>

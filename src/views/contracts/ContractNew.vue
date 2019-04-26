@@ -7,10 +7,10 @@
             <strong>Cập nhật trạng thái</strong>
           </div>
           <el-row>
-            <el-col :span="1">
+            <el-col :span="1" :xs="6">
               <label for="name">File sửa:</label>
             </el-col>
-            <el-col :span="3" style="padding-right: 20px">
+            <el-col :span="3" :xs="18" style="padding-right: 20px; margin-bottom: 10px">
               <el-select v-model="contract.image_status" placeholder="Select">
                 <el-option
                   v-for="item in blendStatus"
@@ -20,10 +20,10 @@
                 ></el-option>
               </el-select>
             </el-col>
-            <el-col :span="1">
+            <el-col :span="1" :xs="6">
               <label for="name">File gốc:</label>
             </el-col>
-            <el-col :span="3" style="padding-right: 20px">
+            <el-col :span="3" :xs="18" style="padding-right: 20px; margin-bottom: 10px">
               <el-select v-model="contract.raw_status" placeholder="Select">
                 <el-option
                   v-for="item in rawStatus"
@@ -33,10 +33,10 @@
                 ></el-option>
               </el-select>
             </el-col>
-            <el-col :span="1">
+            <el-col :span="1" :xs="6">
               <label for="name">Video:</label>
             </el-col>
-            <el-col :span="3" style="padding-right: 20px">
+            <el-col :span="3" :xs="18" style="padding-right: 20px; margin-bottom: 10px">
               <el-select v-model="contract.video_status" placeholder="Select">
                 <el-option
                   v-for="item in videoStatus"
@@ -46,10 +46,10 @@
                 ></el-option>
               </el-select>
             </el-col>
-            <el-col :span="1">
+            <el-col :span="1" :xs="6">
               <label for="name">Trang phục:</label>
             </el-col>
-            <el-col :span="3" style="padding-right: 20px">
+            <el-col :span="3" :xs="18" style="padding-right: 20px; margin-bottom: 10px">
               <el-select v-model="contract.clothes_status" placeholder="Select">
                 <el-option
                   v-for="item in clothesStatus"
@@ -59,10 +59,10 @@
                 ></el-option>
               </el-select>
             </el-col>
-            <el-col :span="1">
+            <el-col :span="1" :xs="6">
               <label for="name">Thanh toán:</label>
             </el-col>
-            <el-col :span="3" style="padding-right: 20px">
+            <el-col :span="3" :xs="18" style="padding-right: 20px; margin-bottom: 10px">
               <el-select v-model="contract.payment_status" placeholder="Select">
                 <el-option
                   v-for="item in paymentStatus"
@@ -72,10 +72,10 @@
                 ></el-option>
               </el-select>
             </el-col>
-            <el-col :span="1">
+            <el-col :span="1" :xs="6">
               <label for="name">Ảnh in:</label>
             </el-col>
-            <el-col :span="2">
+            <el-col :span="2" :xs="18" style="margin-bottom: 10px">
               <el-select v-model="contract.print_status" placeholder="Select">
                 <el-option
                   v-for="item in printStatus"
@@ -302,7 +302,7 @@
             <b-col sm="4">
               <b-form-group disabled="true">
                 <label>Thành tiền dự kiến</label>
-                <span>123123</span>
+                <span>{{calcTotal() | dateMoney}}</span>
               </b-form-group>
             </b-col>
             <b-col sm="4">
@@ -381,19 +381,13 @@
                 <el-timeline-item
                   v-for="(plan, ip) in date.plans_attributes"
                   :key="`h-${ip}`"
-                  :timestamp="plan.plan_time"
+                  :timestamp="date.date_taken | dateFormat"
                 >
                   <div v-if="plan._destroy !== 1">
                     <b>{{plan.plan_time}}</b>
                     : {{plan.costume[0]}} - {{plan.content}}
+                     <i class="el-icon-delete" @click="deletePlan(index4, ip)"></i>
                   </div>
-                  <el-button
-                    type="danger"
-                    icon="el-icon-delete"
-                    @click="deletePlan(index, ip)"
-                    circle
-                    size="mini"
-                  ></el-button>
                 </el-timeline-item>
               </el-timeline>
             </el-tab-pane>
@@ -448,7 +442,7 @@
                 :key="`k-${index6}`"
               >+ {{item.name}}</p>
               <b>Thành tiền tạm tính:</b>
-              <span>1</span>
+              <span>{{calcTotal() | dateMoney}}</span>
               <br>
               <b>Đặt cọc:</b>
               <span>{{contract.deposit}}</span>
@@ -872,6 +866,13 @@ export default {
     }
   },
   methods: {
+    calcTotal() {
+      if(this.contract.budgets) {
+        this.total = this.contract.budgets_attributes.reduce((sum, curr) => sum + (+curr.price) * curr.quantity, 0);
+        return this.total;
+      }
+      return 0;
+    },
     openPlanDialog(date) {
       this.planDate = date.date_taken;
       this.dialogFormVisible = true;
@@ -980,6 +981,7 @@ export default {
       this.dialogFormVisible = false;
     },
     deletePlan(dateIndex, planIdex) {
+      console.log(this.contract.date_takens_attributes, dateIndex, planIdex);
       this.contract.date_takens_attributes[dateIndex].plans_attributes[
         planIdex
       ]._destroy = 1;
@@ -1253,5 +1255,8 @@ export default {
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+.el-icon-delete {
+  padding-left: 20px;
 }
 </style>
