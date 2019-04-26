@@ -4,12 +4,27 @@
       <b-col sm="6">
         <b-card>
           <div slot="header">
-            <strong>Thông tin hợp đồng </strong>
-            <router-link target="_blank" :to="`/public/contracts/${$route.params.id}?code=${contract.secret_key}`">
-              <el-button v-if="id" class="to-the-right" style="margin-right: 20px" type="warning" icon="el-icon-share"></el-button>
+            <strong>Thông tin hợp đồng</strong>
+            <router-link
+              target="_blank"
+              :to="`/public/contracts/${$route.params.id}?code=${contract.secret_key}`"
+            >
+              <el-button
+                v-if="id"
+                class="to-the-right"
+                style="margin-right: 20px"
+                type="warning"
+                icon="el-icon-share"
+              ></el-button>
             </router-link>
             <router-link :to="`/contracts/${$route.params.id}`">
-              <el-button v-if="id" class="to-the-right" style="margin-right: 20px" type="primary" icon="el-icon-edit"></el-button>
+              <el-button
+                v-if="id"
+                class="to-the-right"
+                style="margin-right: 20px"
+                type="primary"
+                icon="el-icon-edit"
+              ></el-button>
             </router-link>
           </div>
           <div v-if="contract.member">
@@ -17,7 +32,9 @@
               <b-col sm="12">
                 <b-form-group>
                   <label>Tên đại diện:</label>
-                  <b><span type="text"> {{contract.member.name}}</span></b>
+                  <b>
+                    <span type="text">{{contract.member.name}}</span>
+                  </b>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -25,7 +42,9 @@
               <b-col sm="12">
                 <b-form-group>
                   <label for="ccnumber">Số điện thoại</label>
-                  <b><span type="text"> {{contract.member.phone_number}}</span></b>
+                  <b>
+                    <span type="text">{{contract.member.phone_number}}</span>
+                  </b>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -33,7 +52,9 @@
               <b-col sm="12">
                 <b-form-group>
                   <label for="ccnumber">Link facebook</label>
-                  <b><span type="text"> {{contract.member.link_facebook}}</span></b>
+                  <b>
+                    <span type="text">{{contract.member.link_facebook}}</span>
+                  </b>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -41,7 +62,9 @@
               <b-col sm="12">
                 <b-form-group>
                   <label for="ccnumber">Giới tính</label>
-                  <b><span type="text"> {{contract.member.gender? 'Nữ': 'Nam'}}</span></b>
+                  <b>
+                    <span type="text">{{contract.member.gender? 'Nữ': 'Nam'}}</span>
+                  </b>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -50,19 +73,25 @@
             <b-col sm="6">
               <b-form-group>
                 <label for="ccnumber">Trường</label>
-                <b><span type="text"> {{contract.school.name}}</span></b>
+                <b>
+                  <span type="text">{{contract.school.name}}</span>
+                </b>
               </b-form-group>
             </b-col>
             <b-col sm="3">
               <b-form-group>
                 <label for="ccnumber">Nhóm/ Lớp</label>
-                <b><span type="text"> {{contract.group}}</span></b>
+                <b>
+                  <span type="text">{{contract.group}}</span>
+                </b>
               </b-form-group>
             </b-col>
             <b-col sm="3">
               <b-form-group>
                 <label for="ccnumber">Năm học</label>
-                <b><span type="text"> {{contract.label}}</span></b>
+                <b>
+                  <span type="text">{{contract.label}}</span>
+                </b>
               </b-form-group>
             </b-col>
           </b-row>
@@ -70,102 +99,88 @@
             <b-col sm="4">
               <b-form-group>
                 <label for="ccnumber">Sĩ số lớp</label>
-                <b><span type="text"> {{contract.total_member}}</span></b>
+                <b>
+                  <span type="text">{{contract.total_member}}</span>
+                </b>
               </b-form-group>
             </b-col>
             <b-col sm="4">
               <b-form-group>
                 <label for="ccnumber">Tổng nam</label>
-                <b><span type="text"> {{contract.male_number}}</span></b>
+                <b>
+                  <span type="text">{{contract.male_number}}</span>
+                </b>
               </b-form-group>
             </b-col>
             <b-col sm="4">
               <b-form-group>
                 <label for="ccnumber">Tổng nữ</label>
-                <b><span type="text"> {{contract.female_number}}</span></b>
+                <b>
+                  <span type="text">{{contract.female_number}}</span>
+                </b>
               </b-form-group>
             </b-col>
           </b-row>
         </b-card>
         <b-card>
           <div slot="header">
-            <strong>Gói chụp - quay </strong><small>Form</small>
+            <strong>Gói chụp - quay</strong>
+            <small>Form</small>
           </div>
           <el-row v-if="budgets">
-          <el-col :xs="24" :span="24">
-            <h5 class="price-contract">Các gói dịch vụ đã chọn</h5>
-            <el-table
-              :data="budgets.filter(x => x.type == 0)"
-              style="width: 100%">
-              <el-table-column
-                label="Tên cụ thể"
-                width="150">
-                <template slot-scope="scope">
-                  <p>{{scope.row.name}}</p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="Cách tính tiền">
-                <template slot-scope="scope">
-                  <p>{{statusCalc[scope.row.type]}}</p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="Số lượng">
-                <template slot-scope="scope">
-                  <p>{{scope.row.quantity}}</p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="Giá">
-                <template slot-scope="scope">
-                  <p>{{scope.row.price}}</p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="Giá">
-                <template slot-scope="scope">
-                  <p>{{scope.row.quantity * scope.row.price | dateMoney}}</p>
-                </template>
-              </el-table-column>
-            </el-table>
-            <h5 class="price-contract">Các nội dung phát sinh</h5>
-            <el-table
-              :data="budgets.filter(x => x.type == 1)"
-              style="width: 100%">
-              <el-table-column
-                label="Tên cụ thể"
-                width="150">
-                <template slot-scope="scope">
-                  <p>{{scope.row.name}}</p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="Cách tính tiền">
-                <template>
-                  <p>Theo số lượng thuê</p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="Số lượng">
-                <template slot-scope="scope">
-                  <p>{{scope.row.quantity}}</p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="Giá">
-                <template slot-scope="scope">
-                  <p>{{scope.row.price}}</p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="Giá">
-                <template slot-scope="scope">
-                  <p>{{scope.row.quantity * scope.row.price | dateMoney}}</p>
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-col>
+            <el-col :xs="24" :span="24">
+              <h5 class="price-contract">Các gói dịch vụ đã chọn</h5>
+              <el-table :data="budgets.filter(x => x.type == 0)" style="width: 100%">
+                <el-table-column label="Tên cụ thể" width="150">
+                  <template slot-scope="scope">
+                    <p>{{scope.row.name}}</p>
+                  </template>
+                </el-table-column>
+                <el-table-column label="Cách tính tiền">
+                  <template slot-scope="scope">
+                    <p>{{statusCalc[scope.row.type]}}</p>
+                  </template>
+                </el-table-column>
+                <el-table-column label="Số lượng">
+                  <template slot-scope="scope">
+                    <p>{{scope.row.quantity}}</p>
+                  </template>
+                </el-table-column>
+                <el-table-column label="Giá">
+                  <template slot-scope="scope">
+                    <p>{{scope.row.price}}</p>
+                  </template>
+                </el-table-column>
+                <el-table-column label="Giá">
+                  <template slot-scope="scope">
+                    <p>{{scope.row.quantity * scope.row.price | dateMoney}}</p>
+                  </template>
+                </el-table-column>
+              </el-table>
+              <h5 class="price-contract">Các nội dung phát sinh</h5>
+              <el-table :data="budgets.filter(x => x.type == 1)" style="width: 100%">
+                <el-table-column label="Tên cụ thể" width="150">
+                  <template slot-scope="scope">
+                    <p>{{scope.row.name}}</p>
+                  </template>
+                </el-table-column>
+                <el-table-column label="Cách tính tiền">
+                  <template>
+                    <p>Theo số lượng thuê</p>
+                  </template>
+                </el-table-column>
+                <el-table-column label="Số lượng">
+                  <template slot-scope="scope">
+                    <p>{{scope.row.quantity}}</p>
+                  </template>
+                </el-table-column>
+                <el-table-column label="Giá">
+                  <template slot-scope="scope">
+                    <p>{{scope.row.price}}</p>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-col>
           </el-row>
           <h3>Thanh toán dự kiến</h3>
           <b-row>
@@ -178,13 +193,17 @@
             <b-col sm="4">
               <b-form-group>
                 <label>Đặt cọc</label>
-                <b><span type="text"> {{contract.deposit | dateMoney}}</span></b>
+                <b>
+                  <span type="text">{{contract.deposit | dateMoney}}</span>
+                </b>
               </b-form-group>
             </b-col>
             <b-col sm="4">
               <b-form-group>
                 <label>Số dư còn lại</label>
-                <b><span type="text"> {{(total - contract.deposit) | dateMoney}}</span></b>
+                <b>
+                  <span type="text">{{(total - contract.deposit) | dateMoney}}</span>
+                </b>
               </b-form-group>
             </b-col>
           </b-row>
@@ -201,10 +220,13 @@
               <div v-for="date in contract.date_takens" :key="`a-${date.id}`">
                 <el-timeline style="width: 80%; margin-top: 15px">
                   <el-timeline-item
-                    v-for="(plan, ip) in date.plans" :key="`a-${ip}`"
-                    :timestamp="date.date_taken | dateFormat">
+                    v-for="(plan, ip) in date.plans"
+                    :key="`a-${ip}`"
+                    :timestamp="plan.plan_time | dateFormat"
+                  >
                     <div v-if="plan._destroy !== 1">
-                      <b>{{plan.plan_time}}</b>: {{plan.costume}} - {{plan.content}}
+                      <b>{{plan.plan_time | timeFormat}}</b>
+                      : {{plan.costume}} - {{plan.content}}
                     </div>
                   </el-timeline-item>
                 </el-timeline>
@@ -216,22 +238,33 @@
           <div slot="header">
             <strong>Ghi chú</strong>
           </div>
-          <b><span type="text"> {{contract.note}}</span></b>
+          <b>
+            <span type="text">{{contract.note}}</span>
+          </b>
         </b-card>
         <b-card>
           <div class="photographer-container photo-back" id="contract">
             <div class="container photo-meta">
               <h3 class="title">Thợ chụp / quay</h3>
               <div class="photographer-list" v-if="photographers">
-                <div class="detail-container" v-for="(photo, index) of photographers" :key="`b-${index}`">
+                <div
+                  class="detail-container"
+                  v-for="(photo, index) of photographers"
+                  :key="`b-${index}`"
+                >
                   <el-row style="padding-bottom: 10px">
                     <el-col :span="2">
                       <div class="avatar">
-                        <img src="https://m.media-amazon.com/images/M/MV5BMjM2OTkyNTY3N15BMl5BanBnXkFtZTgwNzgzNDc2NjE@._V1_CR132,0,761,428_AL_UY268_CR82,0,477,268_AL_.jpg" class="img-avatar" alt="">
+                        <img
+                          src="https://m.media-amazon.com/images/M/MV5BMjM2OTkyNTY3N15BMl5BanBnXkFtZTgwNzgzNDc2NjE@._V1_CR132,0,761,428_AL_UY268_CR82,0,477,268_AL_.jpg"
+                          class="img-avatar"
+                          alt
+                        >
                       </div>
                     </el-col>
                     <el-col :span="10">
-                      <b>{{photo.user.name}}</b><br>
+                      <b>{{photo.user.name}}</b>
+                      <br>
                       <span>{{photo.photographer_role}}</span>
                     </el-col>
                   </el-row>
@@ -242,6 +275,22 @@
               </div>
             </div>
           </div>
+        </b-card>
+        <b-card>
+          <div slot="header">
+            <strong>Phí phát sinh</strong>
+          </div>
+          <el-table :data="items" style="width: 100%">
+            <el-table-column prop="name" label="Tên sản phẩm" width="150"></el-table-column>
+            <el-table-column prop="price" label="Giá" width="120"></el-table-column>
+            <el-table-column prop="quantity" label="Số lượng" width="120"></el-table-column>
+            <el-table-column prop="content" label="Mô tả" width="150"></el-table-column>
+            <el-table-column prop="total" label="Thành tiền" width="120">
+              <template
+                slot-scope="scope"
+              >{{ parseInt(scope.row.price) * parseInt(scope.row.quantity) | dateMoney}}</template>
+            </el-table-column>
+          </el-table>
         </b-card>
       </b-col>
     </b-row>
@@ -255,11 +304,11 @@ import { format, isSameDay } from "date-fns";
 const api = new APIService();
 
 export default {
-  data () {
+  data() {
     return {
       contract: null,
-      formLabelWidth: '120px',
-      statusCalc: ['Tính theo đầu người', 'Tính theo gói'],
+      formLabelWidth: "120px",
+      statusCalc: ["Tính theo đầu người", "Tính theo gói"],
       plan: {
         id: null,
         plan_time: "08:00",
@@ -296,10 +345,11 @@ export default {
       total: 0,
       selected: [], // Must be an array reference!
       show: true,
-      value: '',
-      value7: '',
+      value: "",
+      value7: "",
       reverse: true,
-    }
+      items: []
+    };
   },
   created() {
     this.id = this.$route.params.id;
@@ -307,10 +357,12 @@ export default {
       this.deposit = data.contract.deposit;
       this.payment = data.contract.payment_status;
       this.contract = data.contract;
+      console.log(data);
+      this.items = data.contract.items;
       data.contract.budgets.forEach(x => {
-        if(x.price) {
+        if (x.price) {
           let obj = {};
-          obj.type = x.budgetable_type === 'Package' ? 0 : 1;
+          obj.type = x.budgetable_type === "Package" ? 0 : 1;
           obj.name = x.budgetable.name;
           obj.quantity = x.quantity;
           obj.id = x.id;
@@ -321,13 +373,15 @@ export default {
         }
       });
       this.contract.date_takens.forEach(x => {
-        let a = x.photographer_date_takens.map(y => ({...y, date_taken: x.date_taken}));
+        let a = x.photographer_date_takens.map(y => ({
+          ...y,
+          date_taken: x.date_taken
+        }));
         this.photographers = [...this.photographers, ...a];
-        console.log(x);
         x.plans.forEach(p => {
           p.plan_time = format(new Date(p.plan_time), "HH:mm");
         });
-      })
+      });
     });
   },
   filters: {
@@ -345,14 +399,17 @@ export default {
   },
   methods: {
     calcTotal() {
-      if(this.contract.budgets) {
-        this.total = this.contract.budgets.reduce((sum, curr) => sum + (+curr.price) * curr.quantity, 0);
+      if (this.contract.budgets) {
+        this.total = this.contract.budgets.reduce(
+          (sum, curr) => sum + +curr.price * curr.quantity,
+          0
+        );
         return this.total;
       }
       return 0;
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -367,7 +424,9 @@ export default {
 label {
   padding-right: 20px;
 }
-.img-avatar, .avatar > img, .img-circle {
+.img-avatar,
+.avatar > img,
+.img-circle {
   width: 100%;
   height: 100%;
   object-fit: cover;
