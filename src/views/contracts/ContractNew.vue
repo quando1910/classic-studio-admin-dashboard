@@ -408,7 +408,7 @@
         <b-card>
           <div slot="header">
             <strong>Thông tin hợp đồng</strong>
-            <small>xem lại</small>
+            <!-- <small>xem lại</small> -->
           </div>
           <b-row>
             <b-col sm="6">
@@ -458,6 +458,66 @@
               <br>
             </b-col>
           </b-row>
+        </b-card>
+        <b-card>
+          <div slot="header" class="d-flex justify-between align-center">
+            <strong>Phát sinh</strong>
+            <el-button icon="el-icon-plus" circle @click="dialogFormItemVisible = true"></el-button>
+            <el-dialog title="Phát sinh" :visible.sync="dialogFormItemVisible">
+              <el-form :model="formItem">
+                <el-form-item label="Tên" :label-width="formLabelWidth">
+                  <el-input v-model="formItem.name" autocomplete="off"></el-input>
+                </el-form-item>
+              </el-form>
+              <el-form :model="formItem">
+                <el-form-item label="Đơn giá" :label-width="formLabelWidth">
+                  <el-input v-model="formItem.price" autocomplete="off"></el-input>
+                </el-form-item>
+              </el-form>
+              <el-form :model="formItem">
+                <el-form-item label="Số lương" :label-width="formLabelWidth">
+                  <el-input v-model="formItem.quantity" autocomplete="off"></el-input>
+                </el-form-item>
+              </el-form>
+              <el-form :model="formItem">
+                <el-form-item label="Mô tả" :label-width="formLabelWidth">
+                  <el-input v-model="formItem.content" autocomplete="off"></el-input>
+                </el-form-item>
+              </el-form>
+              <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormItemVisible = false">Thoát</el-button>
+                <el-button type="primary" @click="addItem()">Tạo</el-button>
+              </span>
+            </el-dialog>
+          </div>
+          <el-table
+            :data="contract.items_attributes.filter(v => v.destroy !== 1)"
+            style="width: 100%"
+          >
+            <el-table-column prop="name" label="Tên sản phẩm" width="150"></el-table-column>
+            <el-table-column prop="price" label="Giá" width="120"></el-table-column>
+            <el-table-column prop="quantity" label="Số lượng" width="120"></el-table-column>
+            <el-table-column prop="content" label="Mô tả" width="150"></el-table-column>
+            <el-table-column prop="total" label="Thành tiền" width="120">
+              <template slot-scope="scope">{{ parseInt(scope.row.price) * parseInt(scope.row.quantity) }}</template>
+            </el-table-column>
+            <el-table-column fixed="right" label="Chỉnh sửa" width="120">
+              <template slot-scope="scope">
+                <el-button
+                  type="warning"
+                  icon="el-icon-edit"
+                  circle
+                  @click="editItem(scope.row.id)"
+                ></el-button>
+                <el-button
+                  type="danger"
+                  icon="el-icon-delete"
+                  circle
+                  @click="deteteItem(scope.row)"
+                ></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </b-card>
         <el-button
           class="full-width"
@@ -625,6 +685,7 @@ export default {
       },
       planDate: null,
       dialogFormVisible: false,
+      dialogFormItemVisible: false,
       id: null,
       priorities: [],
       loading: false,
@@ -690,7 +751,7 @@ export default {
             note: ""
           }
         ],
-        items_attributes: [{ name: "", price: "" }],
+        items_attributes: [],
         date_takens_attributes: [
           {
             date_taken: "",
@@ -786,7 +847,16 @@ export default {
           timestamp: "2018-04-11"
         }
       ],
-      propetyTemp: []
+      propetyTemp: [],
+      formItem: {
+        id: null,
+        name: null,
+        price: null,
+        quantity: null,
+        content: ""
+      },
+      itemDataTable: [],
+      itemIndex: 1
     };
   },
   filters: {
@@ -845,6 +915,16 @@ export default {
             _destroy: "0"
           });
         }
+      });
+      this.contract.items_attributes = this.contract.items_attributes.map(v => {
+        return {
+          id: /id/.test(v.id) ? "" : v.id,
+          name: v.name,
+          price: v.price,
+          quantity: v.quantity,
+          content: v.content,
+          _destroy: v._destroy
+        };
       });
       if (!this.id) {
         api.post([END_POINT.contracts], this.contract).then(
@@ -1021,6 +1101,7 @@ export default {
       this.contract.image_status = data.image_status;
       this.contract.print_status = data.print_status;
       this.contract.raw_status = data.raw_status;
+      this.contract.items_attributes = data.items;
       this.budgets = data.budgets;
       if (data.packages.length > 0) {
         this.package_id = data.packages.map(x => x.id);
@@ -1075,6 +1156,62 @@ export default {
     getDate(value) {
       if (!value) return "";
       return format(new Date(value), "DD/MM");
+    },
+    addItem() {
+      this.dialogFormItemVisible = false;
+      if (this.formItem.id) {
+        this.contract.items_attributes.forEach(v => {
+          if (v.id === this.formItem.id) {
+            v.name = this.formItem.name;
+            v.price = this.formItem.price;
+            v.quantity = this.formItem.quantity;
+            v.content = this.formItem.content;
+          }
+        });
+      } else {
+        this.itemIndex += 1;
+        this.contract.items_attributes.push({
+          id: `id${this.itemIndex}`,
+          name: this.formItem.name,
+          price: this.formItem.price,
+          quantity: this.formItem.quantity,
+          content: this.formItem.content,
+          _destroy: 0
+        });
+      }
+      this.formItem = {
+        name: null,
+        price: null,
+        quantity: null,
+        content: null
+      };
+    },
+    deteteItem(item) {
+      if (/id/.test(item.id)) {
+        this.contract.items_attributes.forEach((v, i) => {
+          if (v.id === item.id) {
+            this.contract.items_attributes.splice(i, 1);
+          }
+        });
+      } else {
+        this.contract.items_attributes.forEach((v, i) => {
+          v._destroy = 1;
+        });
+      }
+    },
+    editItem(id) {
+      this.dialogFormItemVisible = true;
+      this.contract.items_attributes.forEach(v => {
+        if (v.id === id) {
+          this.formItem = {
+            id: v.id,
+            name: v.name,
+            price: v.price,
+            quantity: v.quantity,
+            content: v.content
+          };
+        }
+      });
     }
   },
   mounted() {

@@ -136,7 +136,7 @@ export default {
         address: "",
         fb: "",
         gender: null
-      }
+      },
     };
   },
   methods: {
