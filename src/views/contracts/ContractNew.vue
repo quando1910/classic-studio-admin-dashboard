@@ -463,35 +463,9 @@
           <div slot="header" class="d-flex justify-between align-center">
             <strong>Phát sinh</strong>
             <el-button icon="el-icon-plus" circle @click="dialogFormItemVisible = true"></el-button>
-            <el-dialog title="Phát sinh" :visible.sync="dialogFormItemVisible">
-              <el-form :model="formItem">
-                <el-form-item label="Tên" :label-width="formLabelWidth">
-                  <el-input v-model="formItem.name" autocomplete="off"></el-input>
-                </el-form-item>
-              </el-form>
-              <el-form :model="formItem">
-                <el-form-item label="Đơn giá" :label-width="formLabelWidth">
-                  <el-input v-model="formItem.price" autocomplete="off"></el-input>
-                </el-form-item>
-              </el-form>
-              <el-form :model="formItem">
-                <el-form-item label="Số lương" :label-width="formLabelWidth">
-                  <el-input v-model="formItem.quantity" autocomplete="off"></el-input>
-                </el-form-item>
-              </el-form>
-              <el-form :model="formItem">
-                <el-form-item label="Mô tả" :label-width="formLabelWidth">
-                  <el-input v-model="formItem.content" autocomplete="off"></el-input>
-                </el-form-item>
-              </el-form>
-              <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormItemVisible = false">Thoát</el-button>
-                <el-button type="primary" @click="addItem()">Tạo</el-button>
-              </span>
-            </el-dialog>
           </div>
           <el-table
-            :data="contract.items_attributes.filter(v => v.destroy !== 1)"
+            :data="contract.items_attributes.filter(v => v._destroy !== 1)"
             style="width: 100%"
           >
             <el-table-column prop="name" label="Tên sản phẩm" width="150"></el-table-column>
@@ -499,7 +473,9 @@
             <el-table-column prop="quantity" label="Số lượng" width="120"></el-table-column>
             <el-table-column prop="content" label="Mô tả" width="150"></el-table-column>
             <el-table-column prop="total" label="Thành tiền" width="120">
-              <template slot-scope="scope">{{ parseInt(scope.row.price) * parseInt(scope.row.quantity) }}</template>
+              <template
+                slot-scope="scope"
+              >{{ parseInt(scope.row.price) * parseInt(scope.row.quantity) }}</template>
             </el-table-column>
             <el-table-column fixed="right" label="Chỉnh sửa" width="120">
               <template slot-scope="scope">
@@ -513,7 +489,7 @@
                   type="danger"
                   icon="el-icon-delete"
                   circle
-                  @click="deteteItem(scope.row)"
+                  @click="deteteItem(scope.row.id)"
                 ></el-button>
               </template>
             </el-table-column>
@@ -566,6 +542,32 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">Thoát</el-button>
         <el-button type="primary" @click="addPlan(planDate, plan)">Tạo Plan</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog title="Phát sinh" :visible.sync="dialogFormItemVisible">
+      <el-form :model="formItem">
+        <el-form-item label="Tên" :label-width="formLabelWidth">
+          <el-input v-model="formItem.name" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <el-form :model="formItem">
+        <el-form-item label="Đơn giá" :label-width="formLabelWidth">
+          <el-input v-model="formItem.price" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <el-form :model="formItem">
+        <el-form-item label="Số lương" :label-width="formLabelWidth">
+          <el-input v-model="formItem.quantity" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <el-form :model="formItem">
+        <el-form-item label="Mô tả" :label-width="formLabelWidth">
+          <el-input v-model="formItem.content" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormItemVisible = false">Thoát</el-button>
+        <el-button type="primary" @click="addItem()">{{formItem.id ? 'Sửa' : 'Tạo'}}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -1186,16 +1188,18 @@ export default {
         content: null
       };
     },
-    deteteItem(item) {
-      if (/id/.test(item.id)) {
+    deteteItem(id) {
+      if (/id/.test(id)) {
         this.contract.items_attributes.forEach((v, i) => {
-          if (v.id === item.id) {
+          if (v.id === id) {
             this.contract.items_attributes.splice(i, 1);
           }
         });
       } else {
         this.contract.items_attributes.forEach((v, i) => {
-          v._destroy = 1;
+          if(v.id === id){
+            v._destroy = 1;
+          }
         });
       }
     },
