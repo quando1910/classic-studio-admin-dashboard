@@ -5,6 +5,37 @@
         <b-card>
           <div slot="header">
             <strong>Cập nhật trạng thái</strong>
+            <el-popover
+            placement="bottom"
+            width="250"
+            trigger="click">
+            <el-menu
+              default-active="1"
+              class="el-menu-vertical-demo">
+              <el-menu-item index="1" @click="initContract" v-if="!contract.hyperlink">
+                <template slot="title">
+                  <i class="el-icon-news"/>
+                  <span>Khởi tạo hệ thống ảnh</span>
+                </template>
+              </el-menu-item>
+              <el-menu-item index="1" v-if="contract.hyperlink">
+                <template slot="title">
+                  <a target="_blank"
+                    :href="`http://manage.theclassic.studio/admin/contracts/${contract.hyperlink}`">
+                    <i class="el-icon-right"/>
+                    <span>Đi đến hệ thống ảnh</span>
+                  </a>
+                </template>
+              </el-menu-item>
+              <el-menu-item index="1" @click="deleteLinkContract" v-if="contract.hyperlink">
+                <template slot="title">
+                  <i class="el-icon-news"/>
+                  <span>Xóa kết nối hệ thống ảnh</span>
+                </template>
+              </el-menu-item>
+            </el-menu>
+            <i class="to-the-right el-icon-more" slot="reference" style="font-size: 20px"/>
+          </el-popover>
           </div>
           <el-row>
             <el-col :span="1" :xs="6">
@@ -112,6 +143,17 @@
                 style="margin-right: 20px"
                 type="warning"
                 icon="el-icon-share"
+              ></el-button>
+            </router-link>
+            <router-link
+              :to="`/contracts/${$route.params.id}/payment`"
+            >
+              <el-button
+                v-if="id"
+                class="to-the-right"
+                style="margin-right: 20px"
+                type="success"
+                icon="el-icon-document"
               ></el-button>
             </router-link>
           </div>
@@ -368,8 +410,7 @@
             <el-tab-pane
               v-for="(date, index4) in this.contract.date_takens_attributes"
               :key="`g-${index4}`"
-              :label="'Ngày '+ getDate(date.date_taken)"
-            >
+              :label="'Ngày '+ getDate(date.date_taken)">
               <el-button
                 class="to-the-right"
                 type="warning"
@@ -377,19 +418,7 @@
                 @click="openPlanDialog(date)"
                 circle
               ></el-button>
-              <el-timeline :reverse="reverse" style="width: 80%; margin-top: 15px">
-                <el-timeline-item
-                  v-for="(plan, ip) in date.plans_attributes"
-                  :key="`h-${ip}`"
-                  :timestamp="date.date_taken | dateFormat"
-                >
-                  <div v-if="plan._destroy !== 1">
-                    <b>{{plan.plan_time}}</b>
-                    : {{plan.costume[0]}} - {{plan.content}}
-                     <i class="el-icon-delete" @click="deletePlan(index4, ip)"></i>
-                  </div>
-                </el-timeline-item>
-              </el-timeline>
+              <c-timeline :datePlan="date" :canDelete="true" :pos="index4" @deletePlan="deletePlan"/>
             </el-tab-pane>
           </el-tabs>
         </b-card>
@@ -540,28 +569,33 @@
     </el-dialog>
     <el-dialog title="Phát sinh" :visible.sync="dialogFormItemVisible">
       <el-form :model="formItem">
-        <el-form-item label="Tên" :label-width="formLabelWidth">
-          <el-input v-model="formItem.name" autocomplete="off"></el-input>
+        <el-form-item label="Nội dung" :label-width="formLabelWidth">
+          <el-input v-model="formItem.name" autocomplete="off" placeholder="Nội dung phát sinh"></el-input>
         </el-form-item>
       </el-form>
       <el-form :model="formItem">
-        <el-form-item label="Đơn giá" :label-width="formLabelWidth">
-          <el-input v-model="formItem.price" autocomplete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <el-form :model="formItem">
-        <el-form-item label="Số lương" :label-width="formLabelWidth">
+        <el-form-item label="Số lượng" :label-width="formLabelWidth">
           <el-input v-model="formItem.quantity" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <el-form :model="formItem">
+        <el-form-item label="Đơn giá" :label-width="formLabelWidth">
+          <el-input v-model="formItem.price" autocomplete="off" placeholder="Đơn giá của nội dung này"></el-input>
+        </el-form-item>
+      </el-form>
+      <el-form :model="formItem">
         <el-form-item label="Mô tả" :label-width="formLabelWidth">
-          <el-input v-model="formItem.content" autocomplete="off"></el-input>
+          <el-input v-model="formItem.content" autocomplete="off" placeholder="Ghi chú vào đây"></el-input>
+        </el-form-item>
+      </el-form>
+      <el-form :model="formItem">
+        <el-form-item label="Thành tiền" :label-width="formLabelWidth">
+          <b>{{formItem.quantity * formItem.price}}</b>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogFormItemVisible = false">Thoát</el-button>
-        <el-button type="primary" @click="addItem()">{{formItem.id ? 'Sửa' : 'Tạo'}}</el-button>
+        <el-button type="primary" @click="addItem()">{{formItem.id ? 'Sửa' : 'Tạo phát sinh'}}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -720,6 +754,7 @@ export default {
         }
       ],
       contract: {
+        hyperlink: null,
         name: "",
         group: "",
         image_status: 0,
@@ -729,6 +764,9 @@ export default {
         raw_status: 0,
         video_status: 0,
         school_id: "",
+        school: null,
+        code: null,
+        member: null,
         note: "",
         secret_key: "",
         phone: "",
@@ -848,22 +886,12 @@ export default {
         id: null,
         name: null,
         price: null,
-        quantity: null,
+        quantity: 1,
         content: ""
       },
       itemDataTable: [],
       itemIndex: 1
     };
-  },
-  filters: {
-    dateFormat: function(value) {
-      if (!value) return "";
-      return format(new Date(value), "DD/MM");
-    },
-    timeFormat: function(value) {
-      if (!value) return "";
-      return format(new Date(value), "hh:mm");
-    }
   },
   methods: {
     calcTotal() {
@@ -872,6 +900,49 @@ export default {
         return this.total;
       }
       return 0;
+    },
+    initContract() {
+      let obj = {
+        school: this.contract.school.name,
+        name: this.contract.member.name,
+        group: this.contract.group,
+        code: this.contract.code
+      };
+      api.post(['http://manage.theclassic.studio/public/contracts'], obj).then(
+        data => {
+          this.loading = false;
+          this.contract.hyperlink = data.contract.id;
+          api.put([END_POINT.contracts, this.id], this.contract).then(
+            data => {
+              this.$notify({
+                title: 'Success',
+                message: 'Kết nối thành công đến kho ảnh',
+                type: 'success'
+              });
+            }
+          );
+        });
+    },
+    deleteLinkContract() {
+      this.contract.hyperlink = null;
+      this.$confirm('Bạn có chắc muốn ngắt kết nối kho ảnh không?', 'warning', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          api.put([END_POINT.contracts, this.id], this.contract).then(
+            data => {
+              this.loading = false;
+              this.$notify({
+                title: 'Lưu ý',
+                message: 'Xóa kết nối thành công',
+                type: 'warning'
+              });
+            }
+          );
+        }).catch(() => {
+      });
     },
     openPlanDialog(date) {
       this.planDate = date.date_taken;
@@ -934,11 +1005,43 @@ export default {
           data => {
             this.loading = false;
             this.$router.push("/contracts");
+            data = data.contract;
+            let obj = {
+              school: data.school.name,
+              name: data.member.name,
+              group: data.group,
+              code: data.code
+            };
+            api.post(['http://manage.theclassic.studio/public/contracts'], obj).then(
+              data => {
+                this.contract.hyperlink = data.contract.id;
+                this.loading = false;
+                api.put([END_POINT.contracts, this.id], this.contract).then(
+                  data => {
+                    this.loading = false;
+                    this.$notify({
+                      title: 'Success',
+                      message: 'Kết nối thành công đến kho ảnh',
+                      type: 'success'
+                    });
+                  }
+                );
+              });
           },
           err => {
             this.loading = false;
           }
         );
+        
+        // api.post(['http://manage.theclassic.studio/admin/contracts'], this.contract).then(
+        //   data => {
+        //     this.loading = false;
+        //     this.$router.push("/contracts");
+        //   },
+        //   err => {
+        //     this.loading = false;
+        //   }
+        // );
       } else {
         api.put([END_POINT.contracts, this.id], this.contract).then(
           data => {
@@ -980,11 +1083,9 @@ export default {
       this.planDate = null;
       this.dialogFormVisible = false;
     },
-    deletePlan(dateIndex, planIdex) {
-      console.log(this.contract.date_takens_attributes, dateIndex, planIdex);
-      this.contract.date_takens_attributes[dateIndex].plans_attributes[
-        planIdex
-      ]._destroy = 1;
+    deletePlan(obj) {
+      console.log(obj);
+      this.contract.date_takens_attributes[obj.dateIndex].plans_attributes[obj.planIdex]._destroy = 1;
       this.$forceUpdate();
     },
 
@@ -1070,9 +1171,9 @@ export default {
     },
     setDateProperty() {
       if (this.addProperty.length > 0 || this.subProperty.length > 0) {
+        // console.log(this.packages.filter(x => this.package_id.includes(x.id) && x.kind_package == 4).map(x => x.name));
         this.dateProperty = [
-          ...this.addProperty,
-          ...this.subProperty,
+          ...this.packages.filter(x => this.package_id.includes(x.id) && x.kind_package == 4),
           ...this.staticProperty
         ];
       }
@@ -1087,6 +1188,7 @@ export default {
       return null;
     },
     convertData(data) {
+      this.contract.code = data.code;
       this.contract.name = data.name;
       this.contract.group = data.group;
       this.contract.phone = data.phone;
@@ -1098,12 +1200,15 @@ export default {
       this.contract.female_number = data.female_number;
       this.contract.deposit = data.deposit;
       this.contract.school_id = data.school_id;
+      this.contract.member = data.member;
       this.contract.secret_key = data.secret_key;
       this.contract.video_status = data.video_status;
       this.contract.clothes_status = data.clothes_status;
       this.contract.payment_status = data.payment_status;
       this.contract.image_status = data.image_status;
+      this.contract.hyperlink = data.hyperlink;
       this.contract.print_status = data.print_status;
+      this.contract.school = data.school;
       this.contract.raw_status = data.raw_status;
       this.contract.items_attributes = data.items;
       this.budgets = data.budgets;
@@ -1241,6 +1346,7 @@ export default {
     if (this.id) {
       api.get([END_POINT.contracts, this.id]).then(data => {
         this.convertData(data.contract);
+        console.log(data.contract);
       });
     }
   }

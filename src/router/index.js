@@ -70,6 +70,13 @@ const ContractPayment = () => import( '@/views/contracts/ContractPayment' )
 const Photographers = () => import( '@/views/photographers/Photographers' )
 const PhotographerSchedule = () => import( '@/views/photographers/PhotographerSchedule' )
 const Inventories = () => import( '@/views/inventory/Inventories' )
+const Partners = () => import( '@/views/partners/PartnerList' )
+const PartnerDetail = () => import( '@/views/partners/PartnerDetail' )
+const PartnerHire = () => import( '@/views/partners/PartnerHire' )
+const MemberPictures = () => import( '@/views/members/Pictures' )
+
+
+
 
 
 const auth = new AuthService();
@@ -86,8 +93,20 @@ export default new Router( {
       redirect: '/dashboard',
       name: 'Home',
       component: DefaultContainer,
-      beforeEnter: auth.ifAuthenticated,
+      // beforeEnter: auth.ifAuthenticated,
       children: [
+        {
+          path: '/members',
+          name: 'ContractNew',
+          beforeEnter: auth.ifAuthenticated,
+          component: ContractNew
+        },
+        {
+          path: '/members/pictures',
+          name: 'MemberPictures',
+          beforeEnter: auth.ifAuthenticated,
+          component: MemberPictures
+        },
         {
           path: '/contracts/new',
           name: 'ContractNew',
@@ -141,6 +160,24 @@ export default new Router( {
           name: 'Inventories',
           beforeEnter: auth.ifAuthenticated,
           component: Inventories
+        },
+        {
+          path: '/partners',
+          name: 'Partners',
+          beforeEnter: auth.ifAuthenticated,
+          component: Partners
+        },
+        {
+          path: '/partners/hire',
+          name: 'PartnerHire',
+          beforeEnter: auth.ifAuthenticated,
+          component: PartnerHire
+        },
+        {
+          path: '/partners/:id',
+          name: 'PartnerDetail',
+          beforeEnter: auth.ifAuthenticated,
+          component: PartnerDetail
         },
         {
           path: 'forms',

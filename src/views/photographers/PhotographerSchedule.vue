@@ -223,6 +223,7 @@ export default {
         'Senior Photographer',
         'Photographer',
         'Support',
+        'CameraMan',
         'Leader',
         'MC',
         'Decorator'
@@ -237,12 +238,6 @@ export default {
         photographer_role: null
       },
     };
-  },
-  filters: {
-    dateFormat: function(value) {
-      if (!value) return "";
-      return format(new Date(value), "DD/MM");
-    },
   },
   methods: {
     schedulePhoto(val, date) {

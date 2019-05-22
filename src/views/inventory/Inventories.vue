@@ -79,12 +79,6 @@ export default {
       }
     )
   },
-  filters: {
-    dateFormat: function(value) {
-      if (!value) return "";
-      return format(new Date(value), "DD/MM");
-    },
-  },
   watch: {
     code: function(value) {
       if(value && value != '') {
@@ -92,11 +86,6 @@ export default {
       } else {
         this.tableData = this.contracts;
       }
-    }
-  },
-  filters: {
-    dateMoney: function(value) {
-      return parseInt(value).toLocaleString();
     }
   },
   methods: {

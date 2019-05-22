@@ -22,9 +22,11 @@ export class AuthService
   {
     localStorage.setItem( 'toPath', to.path )
     if ( localStorage.getItem( 'ACCESS_TOKEN' ) ) {
+      
       if ( this.checkPath( to.path ) ) {
-        localStorage.clear()
+        // localS torage.clear()
         next( '/members' )
+        return
       }
       next()
       return

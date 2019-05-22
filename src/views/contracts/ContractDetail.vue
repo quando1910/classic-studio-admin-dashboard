@@ -6,15 +6,14 @@
           <div slot="header">
             <strong>Thông tin hợp đồng</strong>
             <router-link
-              target="_blank"
-              :to="`/public/contracts/${$route.params.id}?code=${contract.secret_key}`"
+              :to="`/contracts/${$route.params.id}/payment`"
             >
               <el-button
                 v-if="id"
                 class="to-the-right"
                 style="margin-right: 20px"
-                type="warning"
-                icon="el-icon-share"
+                type="success"
+                icon="el-icon-document"
               ></el-button>
             </router-link>
             <router-link :to="`/contracts/${$route.params.id}`">
@@ -24,6 +23,18 @@
                 style="margin-right: 20px"
                 type="primary"
                 icon="el-icon-edit"
+              ></el-button>
+            </router-link>
+            <router-link
+              target="_blank"
+              :to="`/public/contracts/${$route.params.id}?code=${contract.secret_key}`"
+            >
+              <el-button
+                v-if="id"
+                class="to-the-right"
+                style="margin-right: 20px"
+                type="warning"
+                icon="el-icon-share"
               ></el-button>
             </router-link>
           </div>
@@ -43,7 +54,7 @@
                 <b-form-group>
                   <label for="ccnumber">Số điện thoại</label>
                   <b>
-                    <span type="text">{{contract.member.phone_number}}</span>
+                    <span type="text"><c-phone :phone="contract.member.phone_number"/></span>
                   </b>
                 </b-form-group>
               </b-col>
@@ -181,7 +192,7 @@
                 </el-table-column>
               </el-table>
             </el-col>
-          </el-row>
+          </el-row><br>
           <h3>Thanh toán dự kiến</h3>
           <b-row>
             <b-col sm="4">
@@ -192,7 +203,7 @@
             </b-col>
             <b-col sm="4">
               <b-form-group>
-                <label>Đặt cọc</label>
+                <label>Đặt cọc</label><br>
                 <b>
                   <span type="text">{{contract.deposit | dateMoney}}</span>
                 </b>
@@ -215,21 +226,10 @@
             <strong>Lịch trình</strong>
           </div>
           <h3 class="center-head">Lịch trình</h3>
-          <el-col :xs="24" :span="12">
+          <el-col :xs="24" :span="24">
             <div v-if="contract.date_takens && contract.date_takens.length > 0">
               <div v-for="date in contract.date_takens" :key="`a-${date.id}`">
-                <el-timeline style="width: 80%; margin-top: 15px">
-                  <el-timeline-item
-                    v-for="(plan, ip) in date.plans"
-                    :key="`a-${ip}`"
-                    :timestamp="plan.plan_time | dateFormat"
-                  >
-                    <div v-if="plan._destroy !== 1">
-                      <b>{{plan.plan_time | timeFormat}}</b>
-                      : {{plan.costume}} - {{plan.content}}
-                    </div>
-                  </el-timeline-item>
-                </el-timeline>
+                <c-timeline :datePlan="date" :canDelete="false"/>
               </div>
             </div>
           </el-col>
@@ -300,7 +300,8 @@
 <script>
 import { APIService } from "../../service/apiService.js";
 import { API_URL_DEV, END_POINT } from "../../service/apiRegister.js";
-import { format, isSameDay } from "date-fns";
+import { format } from 'date-fns'
+
 const api = new APIService();
 
 export default {
@@ -378,24 +379,11 @@ export default {
           date_taken: x.date_taken
         }));
         this.photographers = [...this.photographers, ...a];
-        x.plans.forEach(p => {
-          p.plan_time = format(new Date(p.plan_time), "HH:mm");
-        });
+        // x.plans.forEach(p => {
+        //   p.plan_time = format(new Date(p.plan_time), "HH:mm");
+        // });
       });
     });
-  },
-  filters: {
-    dateFormat: function(value) {
-      if (!value) return "";
-      return format(new Date(value), "DD/MM");
-    },
-    timeFormat: function(value) {
-      if (!value) return "";
-      return format(new Date(value), "hh:mm");
-    },
-    dateMoney: function(value) {
-      return parseInt(value).toLocaleString();
-    }
   },
   methods: {
     calcTotal() {
@@ -431,8 +419,5 @@ label {
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
-}
-.el-icon-delete {
-  padding: 10px;
 }
 </style>

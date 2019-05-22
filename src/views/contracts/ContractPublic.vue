@@ -160,7 +160,7 @@
                 <label>Số lượng thành viên: </label><b> {{ contract.total_member }}</b><br>
                 <label>Đại diện của: </label><b>{{contract.group}} - {{contract.school.name}}</b><br>
                 <label>SĐT: </label>
-                <b><a :href="`tel: ${contract.member.phone_number}`">{{contract.member.phone_number}}</a></b><br>
+                <b><c-phone :phone="contract.member.phone_number"/></b><br>
               </el-col>
             </el-row>
           </div>
@@ -172,15 +172,7 @@
           <el-col :xs="24" :span="10">
             <div v-if="contract.date_takens && contract.date_takens.length > 0">
               <div v-for="date in contract.date_takens" :key="`a-${date.id}`">
-                <el-timeline style="width: 80%; margin-top: 15px">
-                  <el-timeline-item
-                    v-for="(plan, ip) in date.plans" :key="`a-${ip}`"
-                    :timestamp="plan.plan_time | dateFormat">
-                    <div v-if="plan._destroy !== 1">
-                      <b>{{plan.plan_time | timeFormat}}</b>: {{plan.costume}} - {{plan.content}}
-                    </div>
-                  </el-timeline-item>
-                </el-timeline>
+                <c-timeline :datePlan="date" :canDelete="false"/>
               </div>
             </div>
           </el-col>
@@ -388,17 +380,6 @@ export default {
             'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius earum architecto dolor, vitae magnam voluptate accusantium assumenda numquam error mollitia, officia facere consequuntur reprehenderit cum voluptates, ea tempore beatae unde.'
         }
       ]
-    }
-  },
-  filters: {
-    dateFormat: function(value) {
-      if (!value) return "";
-      console.log(typeof value);
-      return format(new Date(value), "DD/MM");
-    },
-    timeFormat: function(value) {
-      if (!value) return "";
-      return format(new Date(value), "HH:mm");
     }
   },
   created () {

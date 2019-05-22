@@ -186,12 +186,17 @@ export default {
       icon: 'icon-puzzle',
       children: [
         {
-          name: 'Tạo mới',
-          url: '/base/cards',
+          name: 'Danh sách',
+          url: '/partners',
           icon: 'icon-puzzle'
         },
         {
-          name: 'Đối tác thuê',
+          name: 'Tạo đơn thuê',
+          url: '/partners/hire',
+          icon: 'icon-puzzle'
+        },
+        {
+          name: 'Danh sách thuê',
           url: '/base/cards',
           icon: 'icon-puzzle'
         },

@@ -10,9 +10,13 @@
                   <el-input
                     placeholder="Mã hợp đồng *"
                     v-model="formMember.codeContarct"
+                    @keyup.enter.native="loginMember"
                     class="mb-3"
                   ></el-input>
-                  <el-input placeholder="Số Điện Thoại *" v-model="formMember.phone" class="mb-3"></el-input>
+                  <el-input placeholder="Số Điện Thoại *" 
+                    @keyup.enter.native="loginMember"
+                    v-model="formMember.phone" class="mb-3">
+                  </el-input>
                   <el-row>
                     <el-col :span="12">
                       <el-button class="w-100 boder-right-none" @click="comeBack">Trở về</el-button>
@@ -35,12 +39,14 @@
                     placeholder="Nhập đia chỉ email *"
                     v-model="formUser.email"
                     class="mb-3"
+                    @keyup.enter.native="loginUser"
                   ></el-input>
                   <el-input
                     placeholder="nhập mật khẩu *"
                     v-model="formUser.password"
                     class="mb-3"
                     type="password"
+                    @keyup.enter.native="loginUser"
                   ></el-input>
                   <el-row>
                     <el-col :span="12">
@@ -150,11 +156,11 @@ export default {
           this.formReset();
           const path = auth.getToPath();
           if (res.data.member) {
-            this.$router.push("/members");
+            window.location = "/";
           } else if (path) {
             this.$router.push(`${path}`);
           } else {
-            this.$router.push("/");
+            window.location = "/";
           }
         },
         err => {
@@ -168,6 +174,7 @@ export default {
     },
 
     loginUser() {
+      console.log('enter ');
       const { email, password } = this.formUser;
       auth.loginUser({ email, password }).then(
         () => {
@@ -177,7 +184,7 @@ export default {
           if (path) {
             this.$router.push(`${path}`);
           } else {
-            this.$router.push("/");
+             window.location = "/";
           }
         },
         err => {

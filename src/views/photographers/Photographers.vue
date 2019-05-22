@@ -11,10 +11,13 @@
       </el-row>
     </div>
     <el-table v-loading="loading" :data="tableData" style="width: 100%" @row-click="handleDetail">
-      <el-table-column prop="id" label="ID" width="80"></el-table-column>
-      <el-table-column prop="name" label="Tên" width></el-table-column>
-      <el-table-column prop="phone" label="Số điện thoại" width></el-table-column>
-      <el-table-column prop="address" label="Địa chỉ" width="180"></el-table-column>
+      <el-table-column prop="id" label="ID" width="40"></el-table-column>
+      <el-table-column prop="name" label="Tên"></el-table-column>
+      <el-table-column label="Số điện thoại">
+        <template slot-scope="scope">
+          <c-phone :phone="scope.row.phone"/>
+        </template>
+      </el-table-column>
     </el-table>
     <el-dialog :title="`Thông tin thợ chụp`" :visible.sync="dialogFormVisible">
       <el-form :model="formAddPhotographer">

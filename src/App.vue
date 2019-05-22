@@ -3,8 +3,45 @@
 </template>
 
 <script>
+import { APIService } from "./service/apiService.js";
+import { API_URL_DEV, END_POINT } from "./service/apiRegister.js";
+import {mapActions, mapGetters} from 'vuex'
+
+
+const api = new APIService();
+
 export default {
-  name: 'app'
+  name: 'app',
+  methods: {
+    ...mapActions({
+      checkPeople: 'checkPeople'
+    })
+  },
+  created() {
+    this.checkPeople();
+  },
+  computed: {
+    ...mapGetters({
+      people: 'people'
+    })
+  },
+  mounted() {
+    if(this.people.provider == 'email') {
+      api.get([END_POINT.users]).then(
+      data => {
+        this.partners = data.partners;
+        this.loading = false;
+      })
+      .catch(function (err) {
+        if(err.response.status === 401) {
+          localStorage.clear();
+          this.$router.push(['/']);
+        }
+      });
+    } else if(this.people.provider == 'member') {
+      
+    }
+  }
 }
 </script>
 

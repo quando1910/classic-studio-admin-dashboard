@@ -3,8 +3,8 @@
     <AppHeader fixed>
       <SidebarToggler class="d-lg-none" display="md" mobile />
       <b-link class="navbar-brand" to="#">
-        <img class="navbar-brand-full" src="img/brand/logo.svg" width="89" height="25" alt="CoreUI Logo">
-        <img class="navbar-brand-minimized" src="img/brand/sygnet.svg" width="30" height="30" alt="CoreUI Logo">
+        <img class="navbar-brand-full" src="../assets/img/logo-main-black.png" width="150" alt="CoreUI Logo">
+        <img class="navbar-brand-minimized" src="../assets/img/logo-main-black.png" width="30" height="30" alt="CoreUI Logo">
       </b-link>
       <SidebarToggler class="d-md-down-none" display="lg" />
       <b-navbar-nav class="d-md-down-none">
@@ -32,7 +32,8 @@
       <AppSidebar fixed>
         <SidebarHeader/>
         <SidebarForm/>
-        <SidebarNav :navItems="nav"></SidebarNav>
+        <SidebarNav v-if="people && people.provider == 'email'" :navItems="nav"></SidebarNav>
+        <SidebarNav v-if="people && people.provider == 'member'"  :navItems="navMember"></SidebarNav>
         <SidebarFooter/>
         <SidebarMinimizer/>
       </AppSidebar>
@@ -62,9 +63,11 @@
 
 <script>
 import nav from '@/_nav'
+import navMember from '@/_navMember'
 import { Header as AppHeader, SidebarToggler, Sidebar as AppSidebar, SidebarFooter, SidebarForm, SidebarHeader, SidebarMinimizer, SidebarNav, Aside as AppAside, AsideToggler, Footer as TheFooter, Breadcrumb } from '@coreui/vue'
 import DefaultAside from './DefaultAside'
 import DefaultHeaderDropdownAccnt from './DefaultHeaderDropdownAccnt'
+import {mapActions, mapGetters} from 'vuex'
 
 export default {
   name: 'DefaultContainer',
@@ -84,12 +87,17 @@ export default {
     SidebarNav,
     SidebarMinimizer
   },
+  
   data () {
     return {
-      nav: nav.items
+      nav: nav.items,
+      navMember: navMember.items
     }
   },
   computed: {
+    ...mapGetters({
+      people: 'people'
+    }),
     name () {
       return this.$route.name
     },

@@ -12,5 +12,10 @@ export const END_POINT = {
   members: 'members',
   properties: 'properties',
   date_takens: 'date_takens',
-  photographerDateTakens:'photographer_date_takens'
+  photographerDateTakens:'photographer_date_takens',
+  partners: 'partners',
+  allPartners: 'partners/all_partner',
+  partnerHistory: 'partner_history_properties',
+  invoices: 'invoices',
+  users: 'users'
 };

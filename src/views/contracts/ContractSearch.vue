@@ -18,7 +18,10 @@
       <el-table-column prop="id" label="ID" width="80"></el-table-column>
       <el-table-column prop="member.name" label="Người đại diện" width="200">
       </el-table-column>
-        <el-table-column prop="member.phone_number" label="SĐT" width="200">
+      <el-table-column label="SĐT" width="200">
+        <template slot-scope="scope">
+          <c-phone :phone="scope.row.member.phone_number"/>
+        </template>
       </el-table-column>
       <el-table-column label="Hợp đồng">
         <template slot-scope="scope">
@@ -78,12 +81,6 @@ export default {
         console.log(err);
       }
     )
-  },
-  filters: {
-    dateFormat: function(value) {
-      if (!value) return "";
-      return format(new Date(value), "DD/MM");
-    },
   },
   watch: {
     code: function(value) {

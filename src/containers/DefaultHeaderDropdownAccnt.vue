@@ -2,8 +2,8 @@
   <AppHeaderDropdown right no-caret>
     <template slot="header">
       <img
-        src="img/avatars/6.jpg"
-        class="img-avatar"
+        src="../assets/img/photographer.png"
+        class="img-avatar reset-width"
         alt="admin@bootstrapmaster.com" />
     </template>\
     <template slot="dropdown">
@@ -35,7 +35,7 @@
       </b-dropdown-item>
       <b-dropdown-divider />
       <b-dropdown-item><i class="fa fa-shield" /> Lock Account</b-dropdown-item>
-      <b-dropdown-item><i class="fa fa-lock" /> Logout</b-dropdown-item>
+      <b-dropdown-item @click="logout"><i class="fa fa-lock" /> Logout</b-dropdown-item>
     </template>
   </AppHeaderDropdown>
 </template>
@@ -49,6 +49,17 @@ export default {
   },
   data: () => {
     return { itemsCount: 42 }
+  },
+  methods: {
+    logout() {
+      localStorage.clear();
+      this.$router.push('/pages/login');
+    }
   }
 }
 </script>
+<style>
+.reset-width {
+  width: auto;
+}
+</style>

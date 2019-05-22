@@ -76,12 +76,6 @@ export default {
       currentDate: new Date()
     };
   },
-  filters: {
-    dateFormat: function(value) {
-      if (!value) return "";
-      return format(new Date(value), "DD/MM");
-    },
-  },
   methods: {
     tableRowClassName({row, rowIndex}) {
       var result = compareAsc(
