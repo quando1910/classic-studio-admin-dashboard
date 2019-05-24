@@ -112,9 +112,35 @@
         </b-card>
       </b-col>
       <b-col sm="6">
-        <b-card>
+        <b-card v-if="today">
           <div slot="header">
-            <strong>Danh sách hợp đồng thiếu thợ</strong> <small></small>
+            <strong>Thợ chụp hôm nay</strong> <small></small>
+          </div>
+          <h3>{{currentDate}}</h3>
+          <div v-for="(item, index) of today" :key="index"> 
+            <router-link :to="`/contracts/${item.id}`">
+              <p>{{item.group}} - {{item.school.name}}</p>
+            </router-link>
+            <el-row class="item-hover" v-for="(photo, ind) of item.photographers" :key="ind" style="padding-bottom: 10px">
+              <el-col :span="2" :xs="5">
+              <div class="avatar">
+                <img src="https://m.media-amazon.com/images/M/MV5BMjM2OTkyNTY3N15BMl5BanBnXkFtZTgwNzgzNDc2NjE@._V1_CR132,0,761,428_AL_UY268_CR82,0,477,268_AL_.jpg" class="img-avatar" alt="">
+              </div>
+              </el-col>
+              <el-col :span="7" :xs="14">
+                <b>{{photo.user.name}}</b><br>
+                <span>{{photo.photographer_role}}</span>
+              </el-col>
+              <el-col :span="2" :xs="5">
+                <el-popover
+                  placement="top-start"
+                  trigger="hover"
+                  :content="photo.user.phone">
+                  <a slot="reference" :href="`tel: ${photo.user.phone}`"><i class="fa fa-phone" style="font-size: 30px" aria-hidden="true"></i></a>
+                </el-popover>
+              </el-col>
+            </el-row>
+            <hr>
           </div>
           <div>
           </div>
@@ -218,6 +244,7 @@ export default {
       contracts: [],
       dateContracts: [],
       chooseDate: null,
+      today: null,
       nearContract: [],
       photoRoles: [
         'Senior Photographer',
@@ -281,6 +308,14 @@ export default {
       data => {
         this.dateContracts = data.date_takens;
         this.nearContract = this.dateContracts.filter(x => compareAsc(new Date(x.date_taken), new Date(this.currentDate)) === 1 ).sort(compareAsc).reverse();
+        this.today = this.dateContracts.filter(x => format(new Date(x.date_taken),'MM/DD/YYYY') === format(new Date(),'MM/DD/YYYY'))[0].contracts;
+        this.today = this.today.map(x => {
+          let photo = {
+            photographers: x.date_takens.filter(x => format(new Date(x.date_taken),'MM/DD/YYYY') === format(new Date(),'MM/DD/YYYY'))[0].photographer_date_takens
+          };
+          return {...x, ...photo};
+        });
+        console.log(this.today);
         this.tableData = this.contracts;
         this.loading = false;
       },
@@ -307,5 +342,12 @@ export default {
 }
 .el-icon-delete {
   padding: 10px;
+}
+.item-hover {
+  padding: 10px;
+}
+.item-hover:hover {
+  background-color: rgba(244, 81, 30, 0.1);
+  border-radius: 5px;
 }
 </style>

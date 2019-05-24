@@ -2,8 +2,14 @@
   <div>
     <div class="title-button m-b-10">
       <el-row class="w-100">
-        <el-col :span="16">
+        <el-col :span="6">
           <h3>Tìm kiếm hợp đồng</h3>
+        </el-col>
+        <el-col :span="4">
+          <el-checkbox v-model="paid">Chưa trả tiền</el-checkbox>
+        </el-col>
+        <el-col :span="4">
+          <el-checkbox v-model="returnClothes">Chưa trả trang phục</el-checkbox>
         </el-col>
         <el-col :span="8">
           <el-input
@@ -62,6 +68,8 @@ export default {
   data() {
     return {
       search: "",
+      paid: null,
+      returnClothes: null,
       tableData: [],
       loading: true,
       contracts: [],
@@ -88,6 +96,20 @@ export default {
         this.tableData = this.contracts.filter(x => x.code.toLowerCase().indexOf(this.code.toLowerCase()) >=0);
       } else {
         this.tableData = this.contracts;
+      }
+    },
+    paid: function(value) {
+      if(value) {
+        this.tableData = this.tableData.filter(x => !x.paid_at);
+      } else {
+        this.tableData = [...this.tableData, ...this.contracts.filter(x => x.paid_at)];
+      }
+    },
+    returnClothes: function(value) {
+      if(value) {
+        this.tableData = this.tableData.filter(x => x.clothes_status !== 1);
+      } else {
+        this.tableData = [...this.tableData, ...this.contracts.filter(x => x.clothes_status == 1)];
       }
     }
   },
