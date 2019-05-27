@@ -46,7 +46,7 @@
               <b :class="item.packages.filter(x => x.kind_package === 3).length ? 'red' : ''"><font-awesome-icon :icon="'video'"/></b>
               <b :class="item.packages.filter(x => x.kind_package === 4).length ? 'green' : ''"><font-awesome-icon :icon="'campground'"/></b>
               <router-link :to="`/contracts/${item.id}`">
-                <span>{{item.group}} - {{item.school.name}}</span>
+                <span :class="!item.paid_at? 'unpaid':'paid'">{{item.group}} - {{item.school.name}}</span>
               </router-link>
             </p>
           </template>
@@ -133,5 +133,11 @@ export default {
 
   .el-table .success-row {
     background: #f0f9eb;
+  }
+  .unpaid {
+    color: grey;
+  }
+  .paid {
+    color: #20a8d8;
   }
 </style>
