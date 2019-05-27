@@ -130,14 +130,14 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="price"
+            prop="price_combo"
             label="Đơn giá">
           </el-table-column>
           <el-table-column
             prop="total"
             label="Thành tiền">
             <template slot-scope="scope">
-              <p>{{scope.row.price * scope.row.quantity | dateMoney}}</p>
+              <p>{{scope.row.price_combo * scope.row.quantity | dateMoney}}</p>
             </template>
           </el-table-column>
         </el-table><br>

@@ -30,7 +30,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="ID" width="150">
+        <el-table-column label="ID" width="100">
           <template slot-scope="scope">
             <p>{{scope.row.date_taken | dateFormat}}</p>
           </template>
