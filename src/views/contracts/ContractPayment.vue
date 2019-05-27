@@ -227,6 +227,7 @@ export default {
           obj.quantity = x.quantity;
           obj.id = x.id;
           obj.price = x.price;
+          obj.price_combo = x.price_combo;
           obj.note = x.note;
           obj.total = obj.quantity * obj.price;
           this.budgets.push(obj);
